@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import logo from '../logo.svg';
 import constants from "./constants";
 import './quiz.css';
 
@@ -10,15 +11,15 @@ export default class QuizView extends React.Component {
                   <div className="App">
                     <header className="App-header">
                       <img src={logo} className="App-logo" alt="logo" />
-                      <h1 className="App-title">Welcome to Recipe Decider!</h1>
+                      <h1 className="App-title">Start by taking this quiz:</h1>
                     </header>
                     <p className="App-intro">
-                      To get started, edit <code>src/App.js</code> and save to reload.
+                      Select the ingredients you have, and any dietary restrictions.
                     </p>
                     <button className="btn btn-primary"
                                 onClick={() => {
-                                    this.setState({ chanName: "random" });
-                                    this.props.history.push(constants.routes.start)
+                                    // this.setState({ chanName: "random" });
+                                    this.props.history.push(constants.routes.results)
                                 }}>START</button>
                   </div>
                 );

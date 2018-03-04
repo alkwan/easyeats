@@ -26,10 +26,10 @@ import './App.css';
 
 import {HashRouter as Router, Switch, Redirect, Route} from "react-router-dom";
 import constants from "./components/constants";
-import StartView from "./components/start";
-import QuizView from "./components/quiz";
-import ResultsView from "./components/results";
-import RecipeView from "./components/recipe";
+import StartView from "./components/startPage";
+import QuizView from "./components/quizPage";
+import ResultsView from "./components/resultsPage";
+import RecipeView from "./components/recipePage";
 
 class App extends Component {
   render() {
