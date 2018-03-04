@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recipes</title>
+
+    <link rel="icon" href="img/titleicon.png">
+    
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+     
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="mdb/css/mdb.min.css" rel="stylesheet">
+    <link href="node_modules/pretty-checkbox/dist/pretty-checkbox.min.css" rel="stylesheet">
+   
+    </head>
+
+<body>
+    <!--<header>
+        <!--div id="intro" class="view">
+            <div class="full-bg-img">
+            </div>
+
+            
+        </div>
+        <section class="view intro">
+                <div class="full-bg-img">
+                    <div class="container flex-center">
+                        <div class="row flex-center pt-5 mt-3">
+                            
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </header> -->
+    <div class="bg">
+            <div class="container flex-center">
+                    <div class="row pt-5 mt-3">
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-3 wow fadeInDown" data-wow-delay="0.3s"><strong>RECIPES BY INGREDIENTS</strong></h1>
+                                <hr class="hr-dark mt-4 wow fadeInDown" data-wow-delay="0.4s">
+                                <h3 class="mb-5 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>What ingredients do you have?</strong></h3>
+                                 
+                                <button type="button" class="btn btn-outline-white btn-lg wow fadeInDown" data-wow-delay="0.4s" id="beginquiz" data-toggle="modal" data-target="#quiz">Begin</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <main>
+        <section class="container">
+        <div class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="quizmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Recipe Generator</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav mb-3 justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#ingredients" data-step="1" role="tab" aria-controls="pills-home" aria-selected="true">INGREDIENTS</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#allergy" data-step="2" role="tab" aria-controls="pills-home" aria-selected="true">ALLERGY</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#diet" data-step="3" role="tab" aria-controls="pills-home" aria-selected="true">DIET</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#course" data-step="4" role="tab" aria-controls="pills-home" aria-selected="true">COURSE</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#cuisine" data-step="5" role="tab" aria-controls="pills-home" aria-selected="true">CUISINE</a>
+                            </li>
+                                            
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="ingredients" role="tabpanel" aria-labelledby="pills-home-tab">
+                                    <!--<button class="my-0 btn btn-danger" type="button" id="remove-button">Remove ingredient       <img src="img/removeicon.png"></button> -->
+
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Input your ingredient!" id="input-ingre">
+                                        <div class="input-group-append">
+                                            <button class="my-0 btn btn-brown w-100" type="button" id="add-button"><img src="img/addicon.png"></button>
+                                        </div>
+
+                                    </div>
+                                    <ul class="list-group list-group-flush" id="ul-list">
+                                    </ul>
+
+                            </div>
+                            <div class="tab-pane fade" id="allergy" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="dairy" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Dairy</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="egg" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Egg</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="gluten" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Gluten</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="peanut" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Peanut</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="seafood" id="allergy-input"/>
+                                        <div class="state p-info">
+                                            <label>Seafood</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="sesame" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Sesame</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="soy" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Soy</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="sulfite" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Sulfite</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="tree nut" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Tree Nut</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-curve p-fill p-smooth">
+                                    <input type="checkbox" value="wheat" id="allergy-input" />
+                                        <div class="state p-info">
+                                            <label>Wheat</label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="diet" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="lacto vegetarian" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>Lacto Vegetarian</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="ovo vegetarian" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>Ovo Vegetarian</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="pescetarian" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>Pescetarian</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="vegan" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>Vegan</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="vegetarian" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>Vegetarian</label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="course" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                <div class="form-group"> 
+                                    <label>Course</label>
+                                    <select class="custom-select" id="select-course">
+                                        <option selected>None</option>
+                                        <option value="1">Appetizers</option>
+                                        <option value="2">Beverages</option>
+                                        <ption value="3">Breads</option>
+                                        <option value="4">Breakfast and Brunch</option>
+                                        <option value="5">Cocktails</option>
+                                        <option value="6">Condiments and Sauces</option>
+                                        <option value="7">Desserts</option>
+                                        <option value="8">Lunch and Snacks</option>
+                                        <option value="9">Main Dishes</option>
+                                        <option value="10">Salads</option>
+                                        <option value="11">Side Dishes</option>
+                                        <option value="12">Soups</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="cuisine" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                <div class="form-group"> 
+                                    <label>Cuisine</label>
+                                    <select class="custom-select" id="select-course">
+                                        <option selected>None</option>
+                                        <option value="1">American</option>
+                                        <option value="2">Asian</option>
+                                        <option value="3">Barbecue</option>
+                                        <option value="4">Cajun & Creole</option>
+                                        <option value="5">Chinese</option>
+                                        <option value="6">Cuban</option>
+                                        <option value="7">English</option>
+                                        <option value="8">French</option>
+                                        <option value="9">German</option>
+                                        <option value="10">Greek</option>
+                                        <option value="11">Hawaiin</option>
+                                        <option value="12">Hungarian</option>
+                                        <option value="13">Irish</option>
+                                        <option value="14">Indian</option>
+                                        <option value="15">Italian</option>
+                                        <option value="16">Japanese</option>
+                                        <option value="17">Mediterranean</option>
+                                        <option value="18">Mexican</option>
+                                        <option value="19">Moroccan</option>
+                                        <option value="20">Portugese</option>
+                                        <option value="21">Southern & Soul Food</option>
+                                        <option value="22">Southwestern</option>
+                                        <option value="23">Spanish</option>
+                                        <option value="24">Swedish</option>
+                                        <option value="25">Thai</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                           
+                    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn" id="modal-submit">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </section>
+       
+    </main>
+
+    
+
+    <script type="text/javascript" src="mdb/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="mdb/js/popper.min.js"></script>
+    <script type="text/javascript" src="mdb/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="mdb/js/mdb.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="src/test.js"></script>
+
+    
+    
+    <!--<script>
+    $(document).ready(function() {
+        $('#quiz').modal("show")
+       
+
+    }); 
+    </script>     -->
+</body>
+
+</html>
