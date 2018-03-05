@@ -10,7 +10,7 @@ let state = {
 
 function renderIngredients(input) {
     let li = document.createElement("li");
-    li.textContent = input.ingre;
+    li.textContent = input;
     li.classList.add("list-group-item");
     let span = document.createElement("span");
     span.setAttribute("id", "delete-ingre");
@@ -37,10 +37,11 @@ document.querySelector("#add-button")
     .addEventListener("click", function() {
         let ingreInput = document.querySelector("#input-ingre");
         let ingre = ingreInput.value;
-        let input = {ingre: ingre};
-        state.ingredients.push(input);
+        //let input = {ingre: ingre};
+        state.ingredients.push(ingre);
         render(state);
         ingreInput.value = "";
+        console.log(state.ingredients)
     });
 /*
 let deleteIngre = document.querySelector("#delete-ingre");
