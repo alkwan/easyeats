@@ -2,7 +2,6 @@
 //new WOW().init();                    
 
 let searchSpec = {
-    //ingredients: [],
     ingredients: new Set(),
     currentIngre: "",
     allergy: new Set(),
@@ -12,17 +11,14 @@ let searchSpec = {
 const ALLERGY_CHECK = document.querySelectorAll("#allergy-input");
 const DIET_CHECK = document.querySelectorAll("#diet-input");
 
-
 let ingreID = 0;
 function renderIngredients(input) {
     let li = document.createElement("li");
     li.textContent = input;
     li.classList.add("list-group-item");
     li.setAttribute("id", "ingre"+ ingreID);
-    
     let span = document.createElement("span");
     span.setAttribute("onClick",'deleteIngre("'+'ingre'+ingreID+'")');
-
     let img = document.createElement("img");
     img.src = "./img/deleteicon.png"
     span.appendChild(img);
@@ -32,15 +28,11 @@ function renderIngredients(input) {
 }
 
 
-
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
-    //ul.appendChild(renderIngredients(searchSpec.currentIngre))
     for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));
-    /*for (let i = 0; i < searchSpec.ingredients.length; i++) {
-        ul.appendChild(renderIngredients(searchSpec.ingredients[i]));
-    }*/
+    console.log(searchSpec.ingredients)
 }
 
 render(searchSpec);
@@ -57,17 +49,12 @@ document.querySelector("#add-button")
         console.log(searchSpec.ingredients)
     });
 
+// Remove specific ingredient
 function deleteIngre(ingreid) {
     let ingre = document.getElementById(ingreid);
-    console.log(ingre);
     let ul = document.querySelector("#ul-list");
     ul.removeChild(ingre);
     searchSpec.ingredients.delete(ingre.textContent);
-
-
-    
-    //searchSpec.ingredients = [];
-    console.log(searchSpec.ingredients);
 }   
 // Start search all over again
 document.querySelector("#beginquiz").addEventListener("click", function() {
@@ -93,7 +80,6 @@ for (let i = 0; i < ALLERGY_CHECK.length; i++) {
         } else {
             searchSpec.allergy.delete(allergy);
         }
-        
     });
 }
 
@@ -138,7 +124,6 @@ dietArr.push(searchSpec.diet);
 searchSpec.diet = dietArr;
 
 
-
 function createSearchURL() {
     //Filter search
     let search = "";
@@ -161,7 +146,6 @@ function createSearchURL() {
         for (let i = 0; i < allergies.length; i++) {
             allergySearch = allergySearch + "&allowedAllergy[]=" + resultCodes.allergy[i] + "^" + allergies[i];
             console.log(allergySearch);
-
         }
     }
 
@@ -173,13 +157,9 @@ function createSearchURL() {
             restriction = restriction + "&allowedDiet[]=" + resultCodes.diet[i] + "^" + restrictResults[i];
         }
     }
-
     let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
     return endpoint;
 }
-
-
-
 
 /**
  * Handles responses from the fetch() API.
@@ -264,6 +244,25 @@ function onSubmitQuiz() {
             .then(handleResponse); //Array results in PromiseValue.matches
                                     // total matches in PromiseValue.totalMatchCount...but does not match array.length???
     }, 1000);
+
 }
 
 
+/*let cardContainer = document.querySelector("#card-container");
+let card = document.createElement("div");
+card.classList.add("card");
+let cardImg = document.createElement("img");
+cardImg.classList.add("img-fluid");
+let cardBody = document.createElement("div");
+cardBody.classList.add("card-body");
+let cardTitle = document.createElement("h4");
+cardTitle.classList.add("card-title");
+let cardText = document.createElement("p");
+cardText.classList.add("card-text");
+let cardButton = document.createElement("a");
+cardButton.classList.add("btn btn-light-blue");
+cardBody.appendChild(cardTitle);
+cardBody.appendChild(cardText);
+cardBody.appendChild(cardButton);
+card.appendChild(cardImg);
+card.appendChild(cardBody); */
