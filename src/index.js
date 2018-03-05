@@ -121,8 +121,6 @@ let resultSearch = {
     ingredients: [],
     allergy: [],
     diet: [],
-    metaAllergy: [],
-    metaDiet: ""
 }
 
 let metaData = {};
@@ -146,17 +144,24 @@ function createSearchURL() {
     //Get allergy data
     let allergySearch = "";
     let allergies = resultSearch.allergy;   
+
     for (let i = 0; i < allergies.length; i++) {
-        allergySearch = allergySearch + "&allowedAllergy[]=" + resultSearch.metaAllergy[i] + "^" + allergies[i];
+        for (let j = 0; j < metaData.allergy.length; j++) {
+            if (allergies[i] === metaData.allergy[j].shortDescription) {
+                allergySearch = allergySearch + "&allowedAllergy[]=" + metaData.allergy[j].id + "^" + allergies[i];
+            }
+        }
     }
     
-    //Get diet restriction data
+    //Get diet data
     let restriction = "";
     let restrictResults = searchSpec.diet;
-    if (restrictResults && restrictResults.length > 0) {
-        for (let i = 0; i < resultSearch.metaDiet.length; i++) {
-            if (resultSearch.metaDiet[i].shortDescription === restrictResults) {
-                restriction = "&allowedDiet[]=" + resultSearch.metaDiet + "^" + restrictResults;
+    //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
+
+    if (restrictResults && restrictResults !== "") {
+        for (let i = 0; i < metaData.diet.length; i++) {
+            if (metaData.diet[i].shortDescription === restrictResults) {
+                restriction = "&allowedDiet[]=" + metaData.diet[i].id + "^" + restrictResults;
             }
         }
     }
@@ -216,9 +221,9 @@ function getMetaCode(type, codes, resultArr) {
         for (let j = 0; j < codes.length; j++) {
             if (resultArr[i] === codes[j].shortDescription) {
                 if (type === "allergy") {
-                    resultSearch.metaAllergy.push(codes[j].id);
+                    metaData.allergy.push(codes[j].id);
                 } else if (type === "diet") {
-                    resultSearch.metaDiet.push(codes[j].id);
+                    metaData.diet.push(codes[j].id);
                 }
             }
         }
@@ -241,9 +246,6 @@ function onSubmitQuiz() {
         .then(parseMetaData)
         .then(rawJs => eval(rawJs))
         .catch(handleError);
-
-        console.log(metaData)
-
         
     //Cannot get codes right away when calling API
     setTimeout(function() {
