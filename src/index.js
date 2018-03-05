@@ -1,11 +1,10 @@
 "use strict";
-//new WOW().init();                    
 
 let searchSpec = {
     ingredients: new Set(),
     currentIngre: "",
     allergy: new Set(),
-    diet: undefined
+    diet: ""
 };
 
 const ALLERGY_CHECK = document.querySelectorAll("#allergy-input");
@@ -27,7 +26,10 @@ function renderIngredients(input) {
     return li;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
@@ -55,7 +57,12 @@ function deleteIngre(ingreid) {
     let ul = document.querySelector("#ul-list");
     ul.removeChild(ingre);
     searchSpec.ingredients.delete(ingre.textContent);
+<<<<<<< HEAD
+=======
+    console.log(searchSpec.ingredients);
+>>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
 }   
+
 // Start search all over again
 document.querySelector("#beginquiz").addEventListener("click", function() {
     let ul = document.querySelector("#ul-list");
@@ -101,7 +108,7 @@ const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID 
 const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 
-/*
+/* KEEP THIS CHUNK FOR NOW!!!
 let searchSpec = {
     q:["onion", "bread", "fish"], //&q=onion+bread+fish
     allergy: ["Dairy-Free", "Gluten-Free"], //meta data = http://api.yummly.com/v1/api/metadata/allergy?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
@@ -111,24 +118,28 @@ let searchSpec = {
 } 
 */
 
-
-let resultCodes = {
+let resultSearch = {
+    ingredients: [],
     allergy: [],
-    diet: []
+    diet: [],
 }
 
 let metaData = {};
 
+<<<<<<< HEAD
 let dietArr = [];
 dietArr.push(searchSpec.diet);
 searchSpec.diet = dietArr;
 
 
+=======
+//Creates a URL endpoint for the API to grab data
+>>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
 function createSearchURL() {
     //Filter search
     let search = "";
-    let ingreds = searchSpec.q;
-    if (ingreds && ingreds !== "") {
+    let ingreds = resultSearch.ingredients;
+    if (ingreds.length > 0) {
         search = "&q=";
         for (let i = 0; i < ingreds.length; i++) {
             if (i === 0) {
@@ -141,23 +152,38 @@ function createSearchURL() {
 
     //Get allergy data
     let allergySearch = "";
+<<<<<<< HEAD
     let allergies = Array.from(searchSpec.allergy);
     if (allergies.length > 0) {       
         for (let i = 0; i < allergies.length; i++) {
             allergySearch = allergySearch + "&allowedAllergy[]=" + resultCodes.allergy[i] + "^" + allergies[i];
             console.log(allergySearch);
+=======
+    let allergies = resultSearch.allergy;   
+
+    for (let i = 0; i < allergies.length; i++) {
+        for (let j = 0; j < metaData.allergy.length; j++) {
+            if (allergies[i] === metaData.allergy[j].shortDescription) {
+                allergySearch = allergySearch + "&allowedAllergy[]=" + metaData.allergy[j].id + "^" + allergies[i];
+            }
+>>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
         }
     }
-
-    //Get restriction data
+    
+    //Get diet data
     let restriction = "";
     let restrictResults = searchSpec.diet;
-    if (restrictResults.length > 0) {
-        for (let i = 0; i < restrictResults.length; i++) {
-            restriction = restriction + "&allowedDiet[]=" + resultCodes.diet[i] + "^" + restrictResults[i];
+    //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
+
+    if (restrictResults && restrictResults !== "") {
+        for (let i = 0; i < metaData.diet.length; i++) {
+            if (metaData.diet[i].shortDescription === restrictResults) {
+                restriction = "&allowedDiet[]=" + metaData.diet[i].id + "^" + restrictResults;
+            }
         }
     }
     let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
+    console.log(endpoint);
     return endpoint;
 }
 
@@ -178,6 +204,10 @@ function handleResponse(response) {
     }
 }
 
+/**
+ * Handles responses from the fetch() API for the meta Data codes.
+ * @param {Response} response 
+ */
 function parseMetaData(response) {
     if (response.ok) {
         return response.text();
@@ -207,9 +237,9 @@ function getMetaCode(type, codes, resultArr) {
         for (let j = 0; j < codes.length; j++) {
             if (resultArr[i] === codes[j].shortDescription) {
                 if (type === "allergy") {
-                    resultCodes.allergy.push(codes[j].id);
+                    metaData.allergy.push(codes[j].id);
                 } else if (type === "diet") {
-                    resultCodes.diet.push(codes[j].id);
+                    metaData.diet.push(codes[j].id);
                 }
             }
         }
@@ -218,32 +248,30 @@ function getMetaCode(type, codes, resultArr) {
 
 
 function onSubmitQuiz() {
+    resultSearch.allergy = Array.from(searchSpec.allergy);
+    resultSearch.ingredients = Array.from(searchSpec.ingredients);
+    resultSearch.diet.push(searchSpec.diet);
+
     //Handles Metadata URL codes
-    console.log("entered")
-    console.log(searchSpec)
-    
-    
     fetch(META_ALLERGY)
         .then(parseMetaData)
-        .then(rawJs => eval(rawJs));
+        .then(rawJs => eval(rawJs))
+        .catch(handleError);
 
     fetch(META_DIET)
         .then(parseMetaData)
-        .then(rawJs => eval(rawJs));
-
-
-    // Cannot get codes right away when calling API
-    setTimeout(function() {
-        console.log(searchSpec.allergy)
-        getMetaCode("allergy", metaData.allergy, Array.from(searchSpec.allergy));
+        .then(rawJs => eval(rawJs))
+        .catch(handleError);
         
-        getMetaCode("diet", metaData.diet, searchSpec.diet);
-
-
+    //Cannot get codes right away when calling API
+    setTimeout(function() {
+        getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
+        getMetaCode("diet", metaData.diet, resultSearch.diet);
         fetch(createSearchURL())
-            .then(handleResponse); //Array results in PromiseValue.matches
-                                    // total matches in PromiseValue.totalMatchCount...but does not match array.length???
+            .then(handleResponse)
+            .catch(handleError);    //Array results in PromiseValue.matches
     }, 1000);
+<<<<<<< HEAD
 
 }
 
@@ -266,3 +294,6 @@ cardBody.appendChild(cardText);
 cardBody.appendChild(cardButton);
 card.appendChild(cardImg);
 card.appendChild(cardBody); */
+=======
+}
+>>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
