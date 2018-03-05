@@ -1,5 +1,6 @@
 //Interact and filter from the Yummly API
 
+
 const API_ID = "135ece56";
 const API_KEY = "461b47c5925be6bbc2ec70ad608f7084";
 const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
@@ -7,7 +8,7 @@ const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + 
 const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 
 
-let test = {
+let searchSpec = {
     q:["onion", "bread", "fish"], //&q=onion+bread+fish
     allergy: ["Dairy-Free", "Gluten-Free"], //meta data = http://api.yummly.com/v1/api/metadata/allergy?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
                         //format = &allowedAllergy[]=396^Dairy-Free&allowedAllergy[]=393^Gluten-Free
@@ -15,11 +16,14 @@ let test = {
                         //format = &allowedDiet[]=390^Pescetarian&allowedDiet[]=388^Lacto vegetarian
 } 
 
+
+/*
 let searchSpec = { //Data from quiz here
     q: "",
     allergy: "",
     diet:""
 }
+*/
 
 let resultCodes = {
     allergy: [],
@@ -30,7 +34,7 @@ let resultCodes = {
 function createSearchURL() {
     //Filter search
     let search = "";
-    let ingreds = test.q;
+    let ingreds = searchSpec.q;
     if (ingreds && ingreds !== "") {
         search = "&q=";
         for (let i = 0; i < ingreds.length; i++) {
@@ -44,7 +48,7 @@ function createSearchURL() {
 
     //Get allergy data
     let allergySearch = "";
-    let allergies = test.allergy;
+    let allergies = searchSpec.allergy;
     if (allergies.length > 0) {
         for (let i = 0; i < allergies.length; i++) {
             allergySearch = allergySearch + "&allowedAllergy[]=" + resultCodes.allergy[i] + "^" + allergies[i];
@@ -53,7 +57,7 @@ function createSearchURL() {
 
     //Get restriction data
     let restriction = "";
-    let restrictResults = test.diet;
+    let restrictResults = searchSpec.diet;
     if (restrictResults.length > 0) {
         for (let i = 0; i < restrictResults.length; i++) {
             restriction = restriction + "&allowedDiet[]=" + resultCodes.diet[i] + "^" + restrictResults[i];
@@ -122,6 +126,8 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
+
+/*
 //Handles Metadata URL codes
 let metaData = {};
 fetch(META_ALLERGY)
@@ -143,3 +149,5 @@ setTimeout(function() {
         .then(handleResponse); //Array results in PromiseValue.matches
                                 // total matches in PromiseValue.totalMatchCount...but does not match array.length???
 }, 1000);
+
+*/
