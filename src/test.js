@@ -7,6 +7,8 @@ let state = {
     allergy: new Set(),
     diet: undefined
 };
+const ALLERGY_CHECK = document.querySelectorAll("#allergy-input");
+const DIET_CHECK = document.querySelectorAll("#diet-input");
 
 function renderIngredients(input) {
     let li = document.createElement("li");
@@ -55,25 +57,36 @@ for (let i = 0; i < deleteIngre.length; i++) {
 
     });
 } */
+
 document.querySelector("#beginquiz").addEventListener("click", function() {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
     state.ingredients = [];
+    
+    //let allergyCheck = document.querySelectorAll("#allergy-input");
+    for (let i = 0; i < ALLERGY_CHECK.length; i++) {
+        ALLERGY_CHECK[i].checked = false;
+    }
+    state.allergy = new Set();
+    console.log(state.allergy);
+    for (let i = 0; i < DIET_CHECK.length; i++) {
+        DIET_CHECK[i].checked = false;
+    }
+    state.diet = undefined;
+
 });
 
 let allergyCheck = document.querySelectorAll("#allergy-input");
-for (let i = 0; i < allergyCheck.length; i++) {
-    allergyCheck[i].addEventListener("click", function(){
-        let allergy = allergyCheck[i].value;
+for (let i = 0; i < ALLERGY_CHECK.length; i++) {
+    ALLERGY_CHECK[i].addEventListener("click", function(){
+        let allergy = ALLERGY_CHECK[i].value;
         //let checkedAllergy = {checkedAllergy: allergy}
         //let checked = allergyCheck[i].checked; // true
         //console.log(checked)
-        if (allergyCheck[i].checked) {
-            console.log(allergyCheck[i].checked)
+        if (ALLERGY_CHECK[i].checked) {
             state.allergy.add(allergy);
             console.log(state.allergy)
         } else {
-            console.log(allergyCheck[i].checked)
             state.allergy.delete(allergy);
             console.log(state.allergy)
         }
@@ -88,11 +101,13 @@ for (let i = 0; i < allergyCheck.length; i++) {
     });
 }
 
-let dietCheck = document.querySelectorAll("#diet-input");
-for (let i = 0; i < dietCheck.length; i++) {
-    dietCheck[i].addEventListener("click", function(){
-        let diet = dietCheck[i].value;
+for (let i = 0; i < DIET_CHECK.length; i++) {
+    DIET_CHECK[i].addEventListener("click", function(){
+        let diet = DIET_CHECK[i].value;
         state.diet = diet;
         console.log(state.diet)
     });
 }
+
+
+document.query
