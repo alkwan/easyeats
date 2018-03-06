@@ -1,3 +1,5 @@
+//Gets all the user input about the recipe they are looking for
+
 "use strict";
 
 let searchSpec = {
@@ -50,7 +52,6 @@ document.querySelector("#add-button")
         searchSpec.currentIngre = ingre;
         render(searchSpec);
         ingreInput.value = "";
-        console.log(searchSpec.ingredients)
     });
 
 function deleteIngre(ingreid) {
@@ -97,6 +98,7 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
     });
 }
 
+<<<<<<< HEAD
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Get from API
@@ -140,20 +142,23 @@ function createSearchURL() {
                 search = search + "+" + ingreds[i];
             }
         }
+=======
+document.querySelector("#modal-submit").addEventListener("click", function() {
+    if (searchSpec.ingredients.size >= 3) {
+        //Dont let user submit button until at least 3 ingreds are put in!
+        document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
+    } else {
+        window.alert("needs at least 3 ingred!") //MAKE THIS PRETTIER
+>>>>>>> 071994a26e0ed25d399fff382fa3216f0807023a
     }
+});
 
-    //Get allergy data
-    let allergySearch = "";
-    let allergies = resultSearch.allergy;   
-
-    for (let i = 0; i < allergies.length; i++) {
-        for (let j = 0; j < metaData.allergy.length; j++) {
-            if (allergies[i] === metaData.allergy[j].shortDescription) {
-                allergySearch = allergySearch + "&allowedAllergy[]=" + metaData.allergy[j].id + "^" + allergies[i];
-            }
-        }
-    }
+function urlWrangling() {
+    let allergyArr = Array.from(searchSpec.allergy);
+    let ingredArr = Array.from(searchSpec.ingredients);
+    let dietValue = searchSpec.diet;
     
+<<<<<<< HEAD
     //Get diet data
     let restriction = "";
     let restrictResults = searchSpec.diet;
@@ -187,49 +192,20 @@ function handleResponse(response) {
             .then(function(err) {
                 throw new Error(err.errorMessage);
             });
+=======
+    let urlParams = new URLSearchParams(window.location.search);
+
+    for (let i = 0; i < allergyArr.length; i++) {
+        urlParams.append("allergy", allergyArr[i]);
+>>>>>>> 071994a26e0ed25d399fff382fa3216f0807023a
     }
-}
-
-/**
- * Handles responses from the fetch() API for the meta Data codes.
- * @param {Response} response 
- */
-function parseMetaData(response) {
-    if (response.ok) {
-        return response.text();
-    } else {
-        return response.json()
-            .then(function(err) {
-                throw new Error(err.errorMessage);
-            });
+    for (let i = 0; i < ingredArr.length; i++) {
+        urlParams.append("ingred", ingredArr[i]);
     }
-}
-
-/**
- * Handles errors that occur while fetching
- * @param {Error} err 
- */
-function handleError(err) {
-    console.error(err.message);
-}
-
-//Yummly API is silly and returns JSONP instead of JSON
-function set_metadata(key, value) {
-    metaData[key] = value;
-}
-
-function getMetaCode(type, codes, resultArr) {
-    for (let i = 0; i < resultArr.length; i++) {
-        for (let j = 0; j < codes.length; j++) {
-            if (resultArr[i] === codes[j].shortDescription) {
-                if (type === "allergy") {
-                    metaData.allergy.push(codes[j].id);
-                } else if (type === "diet") {
-                    metaData.diet.push(codes[j].id);
-                }
-            }
-        }
+    if (dietValue && dietValue !== "") {
+        urlParams.append("diet", dietValue);
     }
+<<<<<<< HEAD
 }
 
 // when you submit the quiz, fetch the data based off of the user's input
@@ -322,4 +298,7 @@ function renderResults(results) {
         recipeDiv.appendChild(card);
     }
     return recipeDiv;
+=======
+    return urlParams.toString();
+>>>>>>> 071994a26e0ed25d399fff382fa3216f0807023a
 }
