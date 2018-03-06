@@ -128,6 +128,7 @@ let metaData = {};
 //Creates a URL endpoint for the API to grab data
 function createSearchURL() {
     //Filter search
+    // Add ingredients to the search url
     let search = "";
     let ingreds = resultSearch.ingredients;
     if (ingreds.length > 0) {
@@ -158,6 +159,7 @@ function createSearchURL() {
     let restrictResults = searchSpec.diet;
     //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
 
+    // if the user has a diet restriction, add it to the search url
     if (restrictResults && restrictResults !== "") {
         for (let i = 0; i < metaData.diet.length; i++) {
             if (metaData.diet[i].shortDescription === restrictResults) {
@@ -166,7 +168,7 @@ function createSearchURL() {
         }
     }
 
-    let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
+    let endpoint = API_RECIPE_URL + search + allergySearch + restriction + "&maxResult=1000&maxTotalTimeInSeconds=1800";
     console.log(endpoint);
     return endpoint;
 }
@@ -230,11 +232,13 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
-
+// when you submit the quiz, fetch the data based off of the user's input
+// after that, filter the results and show on the results page?
 function onSubmitQuiz() {
     resultSearch.allergy = Array.from(searchSpec.allergy);
     resultSearch.ingredients = Array.from(searchSpec.ingredients);
     resultSearch.diet.push(searchSpec.diet);
+    // before fetching, have the page display a loading screen
 
     //Handles Metadata URL codes
     fetch(META_ALLERGY)
@@ -253,6 +257,69 @@ function onSubmitQuiz() {
         getMetaCode("diet", metaData.diet, resultSearch.diet);
         fetch(createSearchURL())
             .then(handleResponse)
+            .then(filterResults)
+            .then(renderResults)
+            .then(changePage)
             .catch(handleError);    //Array results in PromiseValue.matches
     }, 1000);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+function changePage(cards) {
+    window.location.href = "recipe.html";
+    let section = document.querySelector(".container");
+    section.appendChild(cards);
+}
+
+// Filter the data from the API
+function filterResults(data) {
+    let matches = data.matches;
+    let recipes = [];
+
+    for (let i = 0; i < matches.length; i++) {
+        let numMatches = 0;
+        let ingredients = matches[i].ingredients;
+        for (let i = 0; i < ingredients.length; i++) {
+            let ingredient = ingredients[i].toLowerCase();
+            for (let j = 0; j < resultSearch.ingredients.length; j++) {
+                if (ingredient.includes(resultSearch.ingredients[j])) {
+                    numMatches++;
+                }
+            }
+        }
+        let percent = numMatches / resultSearch.ingredients.length;
+        if (percent >= 0.5 && percent <= 1) {
+            matches[i].percentMatch = percent;
+            recipes.push(matches[i]);
+        }
+    }
+    console.log(recipes);
+
+    // sort the recipes by highest percent match
+    recipes.sort(function(a, b) {
+        return b.percentMatch - a.percentMatch;
+    });
+    
+    let results = recipes.splice(0, 10);
+    // now take this and display it on the screen... so return it???
+    return results;
+}
+
+// create cards for each recipe, based on the results
+function renderResults(results) {
+    // once you click on one of these cards, fetch the recipe from the API
+    let recipeDiv = document.createElement("div");
+    console.log(results);
+    for (let i = 0; i < results.length; i++) {
+        let card = document.createElement("div");
+        let name = results[i].recipeName;
+        let id = results[i].id;
+        let time = results[i].totalTimeInSeconds;
+        let ingredients = results[i].ingredients;
+
+        card.textContent = "Recipe Name: " + name + " Id: " + id + " Cook time: " + time + " Ingredients: " + ingredients;
+        recipeDiv.appendChild(card);
+    }
+    return recipeDiv;
 }
