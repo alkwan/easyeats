@@ -1,6 +1,6 @@
 "use strict";
 
-let searchSpec = {
+var searchSpec = {
     ingredients: new Set(),
     currentIngre: "",
     allergy: new Set(),
@@ -9,6 +9,7 @@ let searchSpec = {
 
 const ALLERGY_CHECK = document.querySelectorAll("#allergy-input");
 const DIET_CHECK = document.querySelectorAll("#diet-input");
+const QUIZ_SUBMIT = document.querySelector("#modal-submit");
 
 let ingreID = 0;
 function renderIngredients(input) {
@@ -26,15 +27,12 @@ function renderIngredients(input) {
     return li;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
     for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));
     console.log(searchSpec.ingredients)
+    
 }
 
 render(searchSpec);
@@ -48,7 +46,13 @@ document.querySelector("#add-button")
         searchSpec.currentIngre = ingre;
         render(searchSpec);
         ingreInput.value = "";
-        console.log(searchSpec.ingredients)
+        if (searchSpec.ingredients.size >= 3) {
+            QUIZ_SUBMIT.disabled = false;   
+            document.querySelector("#submit-link").setAttribute("href", "#recipe-section");
+          
+        } 
+        
+        
     });
 
 // Remove specific ingredient
@@ -57,10 +61,13 @@ function deleteIngre(ingreid) {
     let ul = document.querySelector("#ul-list");
     ul.removeChild(ingre);
     searchSpec.ingredients.delete(ingre.textContent);
-<<<<<<< HEAD
-=======
-    console.log(searchSpec.ingredients);
->>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
+
+    
+    if (searchSpec.ingredients.size < 3) {
+        QUIZ_SUBMIT.disabled = true;
+        
+    } 
+    
 }   
 
 // Start search all over again
@@ -76,6 +83,10 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
         DIET_CHECK[i].checked = false;
     }
     searchSpec.diet = undefined;
+    let recipeCard = document.querySelector("#individual-recipe");
+    recipeCard.innerHTML = "";
+    QUIZ_SUBMIT.disabled = true; 
+    document.querySelector("#submit-link").setAttribute("href", "#quiz-section");
 });
 
 // Keep track of checked allergy
@@ -98,8 +109,11 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
     });
 }
 
+QUIZ_SUBMIT.addEventListener("click", function() {
+    onSubmitQuiz();
+});
 
-/////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 // Get from API
 
 const API_ID = "135ece56";
@@ -107,7 +121,7 @@ const API_KEY = "461b47c5925be6bbc2ec70ad608f7084";
 const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-
+const RECIPE_DETAIL_URL = "http://api.yummly.com/v1/api/recipe/{recipeID}?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 /* KEEP THIS CHUNK FOR NOW!!!
 let searchSpec = {
     q:["onion", "bread", "fish"], //&q=onion+bread+fish
@@ -122,19 +136,14 @@ let resultSearch = {
     ingredients: [],
     allergy: [],
     diet: [],
+    results: "",
+    recipeID:"",
+    recipeImg: ""
 }
 
 let metaData = {};
 
-<<<<<<< HEAD
-let dietArr = [];
-dietArr.push(searchSpec.diet);
-searchSpec.diet = dietArr;
-
-
-=======
 //Creates a URL endpoint for the API to grab data
->>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
 function createSearchURL() {
     //Filter search
     let search = "";
@@ -152,13 +161,6 @@ function createSearchURL() {
 
     //Get allergy data
     let allergySearch = "";
-<<<<<<< HEAD
-    let allergies = Array.from(searchSpec.allergy);
-    if (allergies.length > 0) {       
-        for (let i = 0; i < allergies.length; i++) {
-            allergySearch = allergySearch + "&allowedAllergy[]=" + resultCodes.allergy[i] + "^" + allergies[i];
-            console.log(allergySearch);
-=======
     let allergies = resultSearch.allergy;   
 
     for (let i = 0; i < allergies.length; i++) {
@@ -166,7 +168,6 @@ function createSearchURL() {
             if (allergies[i] === metaData.allergy[j].shortDescription) {
                 allergySearch = allergySearch + "&allowedAllergy[]=" + metaData.allergy[j].id + "^" + allergies[i];
             }
->>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa
         }
     }
     
@@ -183,7 +184,11 @@ function createSearchURL() {
         }
     }
     let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
-    console.log(endpoint);
+    //console.log(endpoint);
+    //http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c5925be6bbc2ec70ad608f7084&q=chicken+soup+onion
+   /* let paramsString = search.substring(1, search.length) + allergySearch + restriction;
+   */
+    
     return endpoint;
 }
 
@@ -246,11 +251,70 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
+function renderRecipes(data) {
+    resultSearch.results = data.matches;
+    
+    let cardIndividual = document.querySelector("#individual-recipe");
+    for (let i = 0; i < resultSearch.results.length; i++) {
+        let cardCol = document.createElement("div");
+        cardCol.classList.add("col", "col-md-5", "mx-auto", "mt-2", "mb-4");
+        let card = document.createElement("div");
+        card.classList.add("card");
+        let cardImg = document.createElement("img");
+        cardImg.classList.add("img-fluid");
+        let cardBody = document.createElement("div");
+        cardBody.classList.add("card-body");
+        let cardTitle = document.createElement("h4");
+        cardTitle.classList.add("card-title");
+        let cardText = document.createElement("p");
+        cardText.classList.add("card-text");
+        let cardButton = document.createElement("a");
+        cardButton.classList.add("btn", "btn-pink");
+        cardButton.textContent = "Get Recipe";
+        cardBody.appendChild(cardTitle);
+        cardBody.appendChild(cardText);
+        cardBody.appendChild(cardButton);
+        card.appendChild(cardImg);
+        card.appendChild(cardBody);
+        cardCol.appendChild(card);
+        cardIndividual.appendChild(cardCol);
+        
+
+        cardTitle.textContent = resultSearch.results[i].recipeName;
+        let time = resultSearch.results[i].totalTimeInSeconds;
+        let hour = Math.floor(time / 3600);
+        let min = Math.floor(time % 3600 / 60);
+        let hourDisplay = hour > 0 ? hour + (hour === 1 ? " hour " : " hours ") : "";
+        let minDisplay = min > 0 ? min + (min === 1 ? " minute " : " minutes ") : "";
+        cardText.textContent = "Cooking Time: " + hourDisplay + minDisplay;
+
+        resultSearch.recipeID = resultSearch.results[i].id;
+    
+        let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
+        
+        setTimeout(function() {
+            getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
+            getMetaCode("diet", metaData.diet, resultSearch.diet);
+            fetch(recipeDetailUrl)
+                .then(handleResponse)
+                .then(renderRecipeImg)
+                .catch(handleError);    //Array results in PromiseValue.matches
+        }, 1000);
+        
+        function renderRecipeImg(idResult) {
+            resultSearch.recipeImg = idResult.images[0].hostedLargeUrl;
+            cardImg.src = resultSearch.recipeImg;
+            
+        }
+    }
+    
+
+}
 
 function onSubmitQuiz() {
     resultSearch.allergy = Array.from(searchSpec.allergy);
     resultSearch.ingredients = Array.from(searchSpec.ingredients);
-    resultSearch.diet.push(searchSpec.diet);
+    resultSearch.diet.push(searchSpec.diet); 
 
     //Handles Metadata URL codes
     fetch(META_ALLERGY)
@@ -267,33 +331,11 @@ function onSubmitQuiz() {
     setTimeout(function() {
         getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
         getMetaCode("diet", metaData.diet, resultSearch.diet);
+
+
         fetch(createSearchURL())
             .then(handleResponse)
+            .then(renderRecipes)
             .catch(handleError);    //Array results in PromiseValue.matches
     }, 1000);
-<<<<<<< HEAD
-
 }
-
-
-/*let cardContainer = document.querySelector("#card-container");
-let card = document.createElement("div");
-card.classList.add("card");
-let cardImg = document.createElement("img");
-cardImg.classList.add("img-fluid");
-let cardBody = document.createElement("div");
-cardBody.classList.add("card-body");
-let cardTitle = document.createElement("h4");
-cardTitle.classList.add("card-title");
-let cardText = document.createElement("p");
-cardText.classList.add("card-text");
-let cardButton = document.createElement("a");
-cardButton.classList.add("btn btn-light-blue");
-cardBody.appendChild(cardTitle);
-cardBody.appendChild(cardText);
-cardBody.appendChild(cardButton);
-card.appendChild(cardImg);
-card.appendChild(cardBody); */
-=======
-}
->>>>>>> c1503b7707aa7b2ba6b248596c8e2f2e9e42c9aa

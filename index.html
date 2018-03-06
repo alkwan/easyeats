@@ -37,7 +37,7 @@
                 </div>
     </div>
     <main>
-        <section class="container">
+        <section class="container" id ="quiz-section">
         <div class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="quizmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
@@ -67,10 +67,8 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="ingredients" role="tabpanel" aria-labelledby="pills-home-tab">
-                                    <!--<button class="my-0 btn btn-danger" type="button" id="remove-button">Remove ingredient       <img src="img/removeicon.png"></button> -->
-
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Input your ingredient!" id="input-ingre">
+                                        <input type="text" class="form-control" placeholder="Input at least 3 ingredients!" id="input-ingre">
                                         <div class="input-group-append">
                                             <button class="my-0 btn btn-brown w-100" type="button" id="add-button"><img src="img/addicon.png"></button>
                                         </div>
@@ -144,16 +142,34 @@
                             </div>
                             <div class="tab-pane fade" id="diet" role="tabpanel" aria-labelledby="pills-contact-tab">
                                 <div class="pretty p-default p-round p-smooth">
+                                    <input type="radio" value="" id="diet-input" name="radio1" />
+                                        <div class="state p-info">
+                                            <label>None</label>
+                                        </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
                                     <input type="radio" value="Lacto%20vegetarian" id="diet-input" name="radio1" />
                                         <div class="state p-info">
                                             <label>Lacto Vegetarian</label>
                                         </div>
                                 </div>
                                 <div class="pretty p-default p-round p-smooth">
+                                        <input type="radio" value="Lacto-ovo%20vegetarian" id="diet-input" name="radio1" />
+                                            <div class="state p-info">
+                                                <label>Lacto-ovo Vegetarian</label>
+                                            </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
                                     <input type="radio" value="Ovo%20vegetarian" id="diet-input" name="radio1" />
                                         <div class="state p-info">
                                             <label>Ovo Vegetarian</label>
                                         </div>
+                                </div>
+                                <div class="pretty p-default p-round p-smooth">
+                                        <input type="radio" value="Paleo" id="diet-input" name="radio1" />
+                                            <div class="state p-info">
+                                                <label>Paleo</label>
+                                            </div>
                                 </div>
                                 <div class="pretty p-default p-round p-smooth">
                                     <input type="radio" value="Pescetarian" id="diet-input" name="radio1" />
@@ -165,12 +181,6 @@
                                     <input type="radio" value="Vegan" id="diet-input" name="radio1" />
                                         <div class="state p-info">
                                             <label>Vegan</label>
-                                        </div>
-                                </div>
-                                <div class="pretty p-default p-round p-smooth">
-                                    <input type="radio" value="Vegetarian" id="diet-input" name="radio1" />
-                                        <div class="state p-info">
-                                            <label>Vegetarian</label>
                                         </div>
                                 </div>
                             </div>
@@ -233,13 +243,25 @@
                     
                     <div class="modal-footer">
                       <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Close</button>
-                            <a href="recipe.html"><button onClick="onSubmitQuiz()" type="button" class="btn" id="modal-submit">Submit</button></a>
+                        <a href="#" id="submit-link"><button type="button" class="btn" id="modal-submit" disabled>Submit</button></a>
                     
                     </div>
                   </div>
                 </div>
               </div>
         </section>
+        <section id="recipe-section">
+            <div class="container">
+                <div class= "row" id="individual-recipe"> 
+                        
+                            
+                        
+                    </div>
+
+            </div>
+        </section>
+    
+
        
     </main>
 
@@ -256,6 +278,13 @@
 
     <script src="src/index.js"></script>
 
+   <!-- <script>
+        $(function(){
+            $('#modal-submit').click(function(){
+            $('#quiz').modal('hide')
+        });
+});
+    </script> -->
 
 </body>
 

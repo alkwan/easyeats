@@ -2,14 +2,16 @@ body, html {
     height: 100%;
 }
 
+body {
+    background-color: rgb(157, 112, 78);
+
+}
 .bg{
-    background-image: url("../img/header1.jpg");
+    background-image: url("../img/recipebg.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
-
-
+    height: 300px;
 }
 
 
@@ -43,5 +45,11 @@ span img{
     
     margin-left: 30px;
 }
+/*main{
 
-       
+    /*background-image: url("../img/table1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+} */
