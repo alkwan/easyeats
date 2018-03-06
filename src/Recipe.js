@@ -132,6 +132,12 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
+
+
+
+let resultArray = [];
+
+
 //Handles Metadata URL codes
 fetch(META_ALLERGY)
     .then(parseMetaData)
@@ -150,18 +156,7 @@ setTimeout(function() {
     fetch(createSearchURL())
         .then(handleResponse)
         .catch(handleError);    //Array results in PromiseValue.matches
-}, 1000);
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
-let resultArray = [];
-
-function getArrayMatches(result) {
-    resultArray = result.matches;
-}
 
 //hardcoded array recipes
 fetch("http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c5925be6bbc2ec70ad608f7084&q=bread+onion+soup&allowedAllergy[]=393^Gluten-Free&allowedAllergy[]=394^Peanut-Free&allowedDiet[]=390^Pescetarian")
@@ -170,3 +165,17 @@ fetch("http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c592
     .catch(handleError);
 
  ////////////////////////////////////////////////////////////////
+
+
+}, 2000);
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
+
+function getArrayMatches(result) {
+    resultArray = result.matches;
+}
+
