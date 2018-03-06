@@ -285,3 +285,8 @@ function renderRecipes(results) {
         } */
 }
     
+document.querySelector("#restartQuiz").addEventListener("click", function(){ 
+    let recipeCard = document.querySelector("#individual-recipe");
+    recipeCard.innerHTML = "";
+}); 
+
