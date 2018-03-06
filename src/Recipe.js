@@ -58,7 +58,6 @@ function createSearchURL() {
     //Get diet data
     let restriction = "";
     let restrictResults = urlParams.get("diet");
-    //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
 
     if (restrictResults && restrictResults !== "") {
         for (let i = 0; i < metaData.diet.length; i++) {
@@ -68,7 +67,7 @@ function createSearchURL() {
         }
     }
 
-    let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
+    let endpoint = API_RECIPE_URL + search + allergySearch + restriction + "&maxResult=1000&maxTimeInSeconds=1800";
     console.log(endpoint);
     return endpoint;
 }
@@ -132,9 +131,6 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
-
-
-
 let resultArray = [];
 
 
@@ -155,8 +151,66 @@ setTimeout(function() {
     getMetaCode("diet", metaData.diet, resultSearch.diet);
     fetch(createSearchURL())
         .then(handleResponse)
+        .then(filterResults)
+        .then(renderResults)
         .catch(handleError);    //Array results in PromiseValue.matches
 
+// Filter the data from the API
+function filterResults(data) {
+    let matches = data.matches;
+    let recipes = [];
+
+    for (let i = 0; i < matches.length; i++) {
+        let numMatches = 0;
+        let ingredients = matches[i].ingredients;
+        for (let i = 0; i < ingredients.length; i++) {
+            let ingredient = ingredients[i].toLowerCase();
+            for (let j = 0; j < resultSearch.ingredients.length; j++) {
+                if (ingredient.includes(resultSearch.ingredients[j])) {
+                    numMatches++;
+                }
+            }
+        }
+        let percent = numMatches / resultSearch.ingredients.length;
+        if (percent >= 0.5 && percent <= 1) {
+            matches[i].percentMatch = percent;
+            recipes.push(matches[i]);
+        }
+    }
+
+    // sort the recipes by highest percent match
+    recipes.sort(function(a, b) {
+        return b.percentMatch - a.percentMatch;
+    });
+    
+    let results = recipes.splice(0, 10);
+    // now take this and display it on the screen... so return it???
+    console.log(results);
+    return results;
+}
+
+function renderResults(results) {
+    let column = document.querySelector(".col");
+    for (let i = 0; i < results.length; i++) {
+        let card = document.createElement("div");
+        card.classList.add("card");
+        let img = document.createElement("img");
+        img.src = results[i].imageUrlsBySize;
+
+        let body = document.createElement("div");
+        body.classList.add("card-body");
+
+        let recipe = document.createElement("h4");
+        recipe.classList.add("card-title");
+        recipe.textContent = results[i].recipeName;
+
+        let ingredients = document.createElement("p");
+        ingredients.classList.add("card-text");
+        ingredients.textContent = results[i].ingredients;
+
+        column.appendChild(card);
+    }
+}
 
 //hardcoded array recipes
 fetch("http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c5925be6bbc2ec70ad608f7084&q=bread+onion+soup&allowedAllergy[]=393^Gluten-Free&allowedAllergy[]=394^Peanut-Free&allowedDiet[]=390^Pescetarian")
@@ -178,4 +232,3 @@ fetch("http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c592
 function getArrayMatches(result) {
     resultArray = result.matches;
 }
-
