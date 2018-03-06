@@ -83,8 +83,6 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
         DIET_CHECK[i].checked = false;
     }
     searchSpec.diet = undefined;
-    let recipeCard = document.querySelector("#individual-recipe");
-    recipeCard.innerHTML = "";
     QUIZ_SUBMIT.disabled = true; 
     document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
 });

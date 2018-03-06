@@ -84,9 +84,9 @@ function createSearchURL() {
  */
 function handleResponse(response) {
     if (response.ok) {
-        let results = response.json();
-        console.log(results);
-        return results;
+        //let results = response.json();
+        //console.log(results);
+        return response.json();
     } else {
         return response.json()
             .then(function(err) {
@@ -166,6 +166,7 @@ setTimeout(function() {
 ///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 // Filter the data from the API
 function filterResults(data) {
+    console.log("filtering")
     let matches = data.matches;
     let recipes = [];
 
@@ -208,7 +209,7 @@ function filterResults(data) {
 
 function renderRecipes(results) {
     //resultSearch.results = data.matches;
-    
+    console.log("rendering")
     let cardIndividual = document.querySelector("#individual-recipe");
     for (let i = 0; i < results.length; i++) {
         let cardCol = document.createElement("div");
@@ -301,3 +302,8 @@ function renderRecipes(results) {
         } */
 }
     
+document.querySelector("#restartQuiz").addEventListener("click", function(){ 
+    let recipeCard = document.querySelector("#individual-recipe");
+    recipeCard.innerHTML = "";
+}); 
+
