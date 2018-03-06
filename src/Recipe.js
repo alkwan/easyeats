@@ -1,3 +1,5 @@
+"use strict";
+
 // Gets recipes from the API and populated the view
 
 const API_ID = "135ece56";
@@ -135,12 +137,6 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
-
-
-
-//let resultArray = [];
-
-
 //Handles Metadata URL codes
 fetch(META_ALLERGY)
     .then(parseMetaData)
@@ -224,6 +220,9 @@ function renderRecipes(results) {
         cardText.classList.add("card-text");
         let cardButton = document.createElement("a");
         cardButton.classList.add("btn", "btn-pink");
+        cardButton.setAttribute("id", "card-button" + i);
+        cardButton.setAttribute("data-target", "#recipe-info")
+        cardButton.setAttribute("data-toggle", "modal")
         cardButton.textContent = "Get Recipe";
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardText);
@@ -244,21 +243,38 @@ function renderRecipes(results) {
     
         let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
         
-        setTimeout(function() {
-            getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
-            getMetaCode("diet", metaData.diet, resultSearch.diet);
-            fetch(recipeDetailUrl)
-                .then(handleResponse)
-                .then(renderRecipeImg)
-                .catch(handleError);    //Array results in PromiseValue.matches
-        }, 1000);
+        fetch(recipeDetailUrl)
+            .then(handleResponse)
+            .then(renderRecipeInfo)
+            .catch(handleError);
         
-        function renderRecipeImg(idResult) {
-            resultSearch.recipeImg = idResult.images[0].hostedLargeUrl;
-            cardImg.src = resultSearch.recipeImg;
+        
+        function renderRecipeInfo(recipeinfo) {
             
-        }
-    }
-    
+            resultSearch.recipeImg = recipeinfo.images[0].hostedLargeUrl;
+            if (resultSearch.recipeImg) {
+                cardImg.src = resultSearch.recipeImg;
+            } else { 
+                cardImg.src = "../img/plate.jpg";
+            }
+            document.querySelector("#card-button" + i).addEventListener("click", function(){
+                console.log(recipeinfo)
+                document.querySelector(".modal-title").textContent = recipeinfo.name;
+                document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl
+                document.querySelector("#ingredients").textContent = recipeinfo.ingredientLines;
+                document.querySelector("#rating").textContent = recipeinfo.rating;
+                document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
+            }); 
 
+        }
+        
+            
+    }
+        /*function renderIngredients(results) {
+            document.querySelector("#card-button").addEventListener("click", function(){ 
+                document.querySelector(".modal-title").textContent = results.name;
+            });  
+
+        } */
 }
+    
