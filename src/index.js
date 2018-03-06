@@ -51,6 +51,7 @@ document.querySelector("#input-form")
         ingreInput.value = "";
         if (searchSpec.ingredients.size >= 3) {
             QUIZ_SUBMIT.disabled = false;   
+            QUIZ_SUBMIT.classList.add("animated", "bounce", "infinite");
         } 
     });
 
@@ -64,6 +65,7 @@ function deleteIngre(ingreid) {
     
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
+        QUIZ_SUBMIT.classList.remove("animated", "bounce", "infinite");
         document.querySelector("#submit-link").setAttribute("href", "#");
         
     } 
