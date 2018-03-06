@@ -34,9 +34,7 @@ function renderIngredients(input) {
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
-    for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));
-    console.log(searchSpec.ingredients)
-    
+    for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));    
 }
 
 render(searchSpec);

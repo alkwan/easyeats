@@ -202,7 +202,6 @@ function filterResults(data) {
     let results = topOneHundred.slice(0, 10);
 
     // now take this and display it on the screen... so return it???
-    console.log(results);
     return results;
 }
 
@@ -261,12 +260,14 @@ function renderRecipes(results) {
             if (resultSearch.recipeImg) {
                 cardImg.src = resultSearch.recipeImg;
             } else { 
-                cardImg.src = "../img/plate.jpg";
+                cardImg.src = "../img/knife_and_fork.png";
             }
             document.querySelector("#card-button" + i).addEventListener("click", function(){
                 console.log(recipeinfo)
                 document.querySelector(".modal-title").textContent = recipeinfo.name;
-                document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl
+                if (resultSearch.recipeImg) {
+                    document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
+                }
                 document.querySelector("#ingredients").textContent = recipeinfo.ingredientLines;
                 document.querySelector("#rating").textContent = recipeinfo.rating;
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
