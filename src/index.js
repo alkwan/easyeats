@@ -1,4 +1,8 @@
+//Gets all the user input about the recipe they are looking for
+
 "use strict";
+
+new WOW().init();
 
 var searchSpec = {
     ingredients: new Set(),
@@ -38,8 +42,9 @@ function render(searchSpec) {
 render(searchSpec);
 
 // Keep track of input ingredients
-document.querySelector("#add-button")
-    .addEventListener("click", function() {
+document.querySelector("#input-form")
+    .addEventListener("submit", function(evt) {
+        evt.preventDefault();
         let ingreInput = document.querySelector("#input-ingre");
         let ingre = ingreInput.value;
         searchSpec.ingredients.add(ingre);
@@ -48,8 +53,7 @@ document.querySelector("#add-button")
         ingreInput.value = "";
         if (searchSpec.ingredients.size >= 3) {
             QUIZ_SUBMIT.disabled = false;   
-            document.querySelector("#submit-link").setAttribute("href", "#recipe-section");
-          
+            document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
         } 
         
         
@@ -65,6 +69,7 @@ function deleteIngre(ingreid) {
     
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
+        document.querySelector("#submit-link").setAttribute("href", "#");
         
     } 
     
@@ -86,7 +91,7 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
     let recipeCard = document.querySelector("#individual-recipe");
     recipeCard.innerHTML = "";
     QUIZ_SUBMIT.disabled = true; 
-    document.querySelector("#submit-link").setAttribute("href", "#quiz-section");
+    document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
 });
 
 // Keep track of checked allergy
@@ -108,234 +113,31 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
         searchSpec.diet = diet;
     });
 }
-
-QUIZ_SUBMIT.addEventListener("click", function() {
-    onSubmitQuiz();
-});
-
-//////////////////////////////////////////////////////////////////////////////////////
-// Get from API
-
-const API_ID = "135ece56";
-const API_KEY = "461b47c5925be6bbc2ec70ad608f7084";
-const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const RECIPE_DETAIL_URL = "http://api.yummly.com/v1/api/recipe/{recipeID}?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-/* KEEP THIS CHUNK FOR NOW!!!
-let searchSpec = {
-    q:["onion", "bread", "fish"], //&q=onion+bread+fish
-    allergy: ["Dairy-Free", "Gluten-Free"], //meta data = http://api.yummly.com/v1/api/metadata/allergy?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
-                        //format = &allowedAllergy[]=396^Dairy-Free&allowedAllergy[]=393^Gluten-Free
-    diet: ["Pescetarian", "Lacto vegetarian"] //meta data = http://api.yummly.com/v1/api/metadata/diet?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
-                        //format = &allowedDiet[]=390^Pescetarian&allowedDiet[]=388^Lacto vegetarian
-} 
-*/
-
-let resultSearch = {
-    ingredients: [],
-    allergy: [],
-    diet: [],
-    results: "",
-    recipeID:"",
-    recipeImg: ""
-}
-
-let metaData = {};
-
-//Creates a URL endpoint for the API to grab data
-function createSearchURL() {
-    //Filter search
-    let search = "";
-    let ingreds = resultSearch.ingredients;
-    if (ingreds.length > 0) {
-        search = "&q=";
-        for (let i = 0; i < ingreds.length; i++) {
-            if (i === 0) {
-                search = search + ingreds[i];
-            } else {
-                search = search + "+" + ingreds[i];
-            }
-        }
-    }
-
-    //Get allergy data
-    let allergySearch = "";
-    let allergies = resultSearch.allergy;   
-
-    for (let i = 0; i < allergies.length; i++) {
-        for (let j = 0; j < metaData.allergy.length; j++) {
-            if (allergies[i] === metaData.allergy[j].shortDescription) {
-                allergySearch = allergySearch + "&allowedAllergy[]=" + metaData.allergy[j].id + "^" + allergies[i];
-            }
-        }
-    }
-    
-    //Get diet data
-    let restriction = "";
-    let restrictResults = searchSpec.diet;
-    //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
-
-    if (restrictResults && restrictResults !== "") {
-        for (let i = 0; i < metaData.diet.length; i++) {
-            if (metaData.diet[i].shortDescription === restrictResults) {
-                restriction = "&allowedDiet[]=" + metaData.diet[i].id + "^" + restrictResults;
-            }
-        }
-    }
-    let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
-    //console.log(endpoint);
-    //http://api.yummly.com/v1/api/recipes?_app_id=135ece56&_app_key=461b47c5925be6bbc2ec70ad608f7084&q=chicken+soup+onion
-   /* let paramsString = search.substring(1, search.length) + allergySearch + restriction;
-   */
-    
-    return endpoint;
-}
-
-/**
- * Handles responses from the fetch() API.
- * @param {Response} response 
- */
-function handleResponse(response) {
-    if (response.ok) {
-        let results = response.json();
-        console.log(results);
-        return results;
+/*
+document.querySelector("#modal-submit").addEventListener("click", function() {
+    if (searchSpec.ingredients.size >= 3) {
+        //Dont let user submit button until at least 3 ingreds are put in!
+        document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
     } else {
-        return response.json()
-            .then(function(err) {
-                throw new Error(err.errorMessage);
-            });
+        window.alert("needs at least 3 ingred!") //MAKE THIS PRETTIER
     }
-}
+});*/
 
-/**
- * Handles responses from the fetch() API for the meta Data codes.
- * @param {Response} response 
- */
-function parseMetaData(response) {
-    if (response.ok) {
-        return response.text();
-    } else {
-        return response.json()
-            .then(function(err) {
-                throw new Error(err.errorMessage);
-            });
-    }
-}
-
-/**
- * Handles errors that occur while fetching
- * @param {Error} err 
- */
-function handleError(err) {
-    console.error(err.message);
-}
-
-//Yummly API is silly and returns JSONP instead of JSON
-function set_metadata(key, value) {
-    metaData[key] = value;
-}
-
-function getMetaCode(type, codes, resultArr) {
-    for (let i = 0; i < resultArr.length; i++) {
-        for (let j = 0; j < codes.length; j++) {
-            if (resultArr[i] === codes[j].shortDescription) {
-                if (type === "allergy") {
-                    metaData.allergy.push(codes[j].id);
-                } else if (type === "diet") {
-                    metaData.diet.push(codes[j].id);
-                }
-            }
-        }
-    }
-}
-
-function renderRecipes(data) {
-    resultSearch.results = data.matches;
+function urlWrangling() {
+    let allergyArr = Array.from(searchSpec.allergy);
+    let ingredArr = Array.from(searchSpec.ingredients);
+    let dietValue = searchSpec.diet;
     
-    let cardIndividual = document.querySelector("#individual-recipe");
-    for (let i = 0; i < resultSearch.results.length; i++) {
-        let cardCol = document.createElement("div");
-        cardCol.classList.add("col", "col-md-5", "mx-auto", "mt-2", "mb-4");
-        let card = document.createElement("div");
-        card.classList.add("card");
-        let cardImg = document.createElement("img");
-        cardImg.classList.add("img-fluid");
-        let cardBody = document.createElement("div");
-        cardBody.classList.add("card-body");
-        let cardTitle = document.createElement("h4");
-        cardTitle.classList.add("card-title");
-        let cardText = document.createElement("p");
-        cardText.classList.add("card-text");
-        let cardButton = document.createElement("a");
-        cardButton.classList.add("btn", "btn-pink");
-        cardButton.textContent = "Get Recipe";
-        cardBody.appendChild(cardTitle);
-        cardBody.appendChild(cardText);
-        cardBody.appendChild(cardButton);
-        card.appendChild(cardImg);
-        card.appendChild(cardBody);
-        cardCol.appendChild(card);
-        cardIndividual.appendChild(cardCol);
-        
+    let urlParams = new URLSearchParams(window.location.search);
 
-        cardTitle.textContent = resultSearch.results[i].recipeName;
-        let time = resultSearch.results[i].totalTimeInSeconds;
-        let hour = Math.floor(time / 3600);
-        let min = Math.floor(time % 3600 / 60);
-        let hourDisplay = hour > 0 ? hour + (hour === 1 ? " hour " : " hours ") : "";
-        let minDisplay = min > 0 ? min + (min === 1 ? " minute " : " minutes ") : "";
-        cardText.textContent = "Cooking Time: " + hourDisplay + minDisplay;
-
-        resultSearch.recipeID = resultSearch.results[i].id;
-    
-        let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
-        
-        setTimeout(function() {
-            getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
-            getMetaCode("diet", metaData.diet, resultSearch.diet);
-            fetch(recipeDetailUrl)
-                .then(handleResponse)
-                .then(renderRecipeImg)
-                .catch(handleError);    //Array results in PromiseValue.matches
-        }, 1000);
-        
-        function renderRecipeImg(idResult) {
-            resultSearch.recipeImg = idResult.images[0].hostedLargeUrl;
-            cardImg.src = resultSearch.recipeImg;
-            
-        }
+    for (let i = 0; i < allergyArr.length; i++) {
+        urlParams.append("allergy", allergyArr[i]);
     }
-    
-
-}
-
-function onSubmitQuiz() {
-    resultSearch.allergy = Array.from(searchSpec.allergy);
-    resultSearch.ingredients = Array.from(searchSpec.ingredients);
-    resultSearch.diet.push(searchSpec.diet); 
-
-    //Handles Metadata URL codes
-    fetch(META_ALLERGY)
-        .then(parseMetaData)
-        .then(rawJs => eval(rawJs))
-        .catch(handleError);
-
-    fetch(META_DIET)
-        .then(parseMetaData)
-        .then(rawJs => eval(rawJs))
-        .catch(handleError);
-        
-    //Cannot get codes right away when calling API
-    setTimeout(function() {
-        getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
-        getMetaCode("diet", metaData.diet, resultSearch.diet);
-
-
-        fetch(createSearchURL())
-            .then(handleResponse)
-            .then(renderRecipes)
-            .catch(handleError);    //Array results in PromiseValue.matches
-    }, 1000);
+    for (let i = 0; i < ingredArr.length; i++) {
+        urlParams.append("ingred", ingredArr[i]);
+    }
+    if (dietValue && dietValue !== "") {
+        urlParams.append("diet", dietValue);
+    }
+    return urlParams.toString();
 }

@@ -21,20 +21,18 @@
 
 <body>
     <div class="bg">
-            <div class="container flex-center">
-                    <div class="row pt-5 mt-3">
-                        <div class="col-md-12">
-                            <div class="text-center">
-                                <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-3 wow fadeInDown" data-wow-delay="0.3s"><strong>RECIPES BY INGREDIENTS</strong></h1>
-                                <hr class="hr-dark mt-4 wow fadeInDown" data-wow-delay="0.4s">
-                                <h3 class="mb-5 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>What ingredients do you have?</strong></h3>
-                                 
-                                <button type="button" class="btn btn-outline-white btn-lg wow fadeInDown" data-wow-delay="0.4s" id="beginquiz" data-toggle="modal" data-target="#quiz">Begin</button>
-
-                            </div>
-                        </div>
+        <div class="container pt-5">
+            <div class="row">
+                <div class="col">
+                    <div class="text-center pt-4">
+                        <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-3 wow fadeInDown" data-wow-delay="0.3s"><strong>RECIPES BY INGREDIENTS</strong></h1>
+                        <hr class="hr-light mt-4 wow fadeInDown" data-wow-delay="0.4s">
+                        <h3 class="mb-5 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>What ingredients do you have?</strong></h3>
+                        <button type="button" class="btn btn-outline-white btn-lg wow fadeInDown" data-wow-delay="0.4s" id="beginquiz" data-toggle="modal" data-target="#quiz">Begin</button>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
     <main>
         <section class="container" id ="quiz-section">
@@ -67,13 +65,13 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="ingredients" role="tabpanel" aria-labelledby="pills-home-tab">
-                                    <div class="input-group">
+                                    <form class="input-group" id="input-form">
                                         <input type="text" class="form-control" placeholder="Input at least 3 ingredients!" id="input-ingre">
                                         <div class="input-group-append">
-                                            <button class="my-0 btn btn-brown w-100" type="button" id="add-button"><img src="img/addicon.png"></button>
+                                            <button class="my-0 btn btn-brown w-100" type="submit" id="add-button"><img src="img/addicon.png"></button>
                                         </div>
 
-                                    </div>
+                                    </form>
                                     <ul class="list-group list-group-flush" id="ul-list">
                                     </ul>
 
@@ -184,59 +182,6 @@
                                         </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="course" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                <div class="form-group"> 
-                                    <label>Course</label>
-                                    <select class="custom-select" id="select-course">
-                                        <option selected>None</option>
-                                        <option value="1">Appetizers</option>
-                                        <option value="2">Beverages</option>
-                                        <ption value="3">Breads</option>
-                                        <option value="4">Breakfast and Brunch</option>
-                                        <option value="5">Cocktails</option>
-                                        <option value="6">Condiments and Sauces</option>
-                                        <option value="7">Desserts</option>
-                                        <option value="8">Lunch and Snacks</option>
-                                        <option value="9">Main Dishes</option>
-                                        <option value="10">Salads</option>
-                                        <option value="11">Side Dishes</option>
-                                        <option value="12">Soups</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="cuisine" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                <div class="form-group"> 
-                                    <label>Cuisine</label>
-                                    <select class="custom-select" id="select-course">
-                                        <option selected>None</option>
-                                        <option value="1">American</option>
-                                        <option value="2">Asian</option>
-                                        <option value="3">Barbecue</option>
-                                        <option value="4">Cajun & Creole</option>
-                                        <option value="5">Chinese</option>
-                                        <option value="6">Cuban</option>
-                                        <option value="7">English</option>
-                                        <option value="8">French</option>
-                                        <option value="9">German</option>
-                                        <option value="10">Greek</option>
-                                        <option value="11">Hawaiin</option>
-                                        <option value="12">Hungarian</option>
-                                        <option value="13">Irish</option>
-                                        <option value="14">Indian</option>
-                                        <option value="15">Italian</option>
-                                        <option value="16">Japanese</option>
-                                        <option value="17">Mediterranean</option>
-                                        <option value="18">Mexican</option>
-                                        <option value="19">Moroccan</option>
-                                        <option value="20">Portugese</option>
-                                        <option value="21">Southern & Soul Food</option>
-                                        <option value="22">Southwestern</option>
-                                        <option value="23">Spanish</option>
-                                        <option value="24">Swedish</option>
-                                        <option value="25">Thai</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                            
@@ -250,16 +195,7 @@
                 </div>
               </div>
         </section>
-        <section id="recipe-section">
-            <div class="container">
-                <div class= "row" id="individual-recipe"> 
-                        
-                            
-                        
-                    </div>
-
-            </div>
-        </section>
+        
     
 
        
@@ -277,14 +213,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script src="src/index.js"></script>
-
-   <!-- <script>
-        $(function(){
-            $('#modal-submit').click(function(){
-            $('#quiz').modal('hide')
-        });
-});
-    </script> -->
 
 </body>
 
