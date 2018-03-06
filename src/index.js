@@ -53,10 +53,7 @@ document.querySelector("#input-form")
         ingreInput.value = "";
         if (searchSpec.ingredients.size >= 3) {
             QUIZ_SUBMIT.disabled = false;   
-            document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
         } 
-        
-        
     });
 
 // Remove specific ingredient
@@ -113,15 +110,13 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
         searchSpec.diet = diet;
     });
 }
-/*
+
 document.querySelector("#modal-submit").addEventListener("click", function() {
     if (searchSpec.ingredients.size >= 3) {
         //Dont let user submit button until at least 3 ingreds are put in!
         document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
-    } else {
-        window.alert("needs at least 3 ingred!") //MAKE THIS PRETTIER
     }
-});*/
+});
 
 function urlWrangling() {
     let allergyArr = Array.from(searchSpec.allergy);

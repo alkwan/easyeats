@@ -24,7 +24,7 @@ let resultSearch = {
     ingredients: urlParams.getAll("ingred"),
     allergy: urlParams.getAll("allergy"),
     diet: [urlParams.get("diet")],
-    results: "",
+   // results: "",
     recipeID:"",
     recipeImg: ""
 }
@@ -62,7 +62,6 @@ function createSearchURL() {
     //Get diet data
     let restriction = "";
     let restrictResults = urlParams.get("diet");
-    //console.log(metaData.diet) UI needs Lacto-ovo vegetarian and Paleo, remove just vegetarian
 
     if (restrictResults && restrictResults !== "") {
         for (let i = 0; i < metaData.diet.length; i++) {
@@ -72,7 +71,7 @@ function createSearchURL() {
         }
     }
 
-    let endpoint = API_RECIPE_URL + search + allergySearch + restriction;
+    let endpoint = API_RECIPE_URL + search + allergySearch + restriction + "&maxResult=1000&maxTotalTimeInSeconds=1800";
     console.log(endpoint);
     return endpoint;
 }
@@ -159,8 +158,45 @@ setTimeout(function() {
     getMetaCode("diet", metaData.diet, resultSearch.diet);
     fetch(createSearchURL())
         .then(handleResponse)
+        .then(filterResults)
         .then(renderRecipes)
         .catch(handleError);    //Array results in PromiseValue.matches
+
+// Filter the data from the API
+function filterResults(data) {
+    let matches = data.matches;
+    let recipes = [];
+
+    for (let i = 0; i < matches.length; i++) {
+        let numMatches = 0;
+        let ingredients = matches[i].ingredients;
+        for (let i = 0; i < ingredients.length; i++) {
+            let ingredient = ingredients[i].toLowerCase();
+            for (let j = 0; j < resultSearch.ingredients.length; j++) {
+                if (ingredient.includes(resultSearch.ingredients[j])) {
+                    numMatches++;
+                }
+            }
+        }
+        let percent = numMatches / resultSearch.ingredients.length;
+        if (percent >= 0.5 && percent <= 1) {
+            matches[i].percentMatch = percent;
+            recipes.push(matches[i]);
+        }
+    }
+
+    // sort the recipes by highest percent match
+    recipes.sort(function(a, b) {
+        return b.percentMatch - a.percentMatch;
+    });
+    
+    let results = recipes.splice(0, 10);
+    // now take this and display it on the screen... so return it???
+    console.log(results);
+    return results;
+    }
+
+
 }, 2000);
 
 
@@ -169,11 +205,11 @@ setTimeout(function() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 
-function renderRecipes(data) {
-    resultSearch.results = data.matches;
+function renderRecipes(results) {
+    //resultSearch.results = data.matches;
     
     let cardIndividual = document.querySelector("#individual-recipe");
-    for (let i = 0; i < resultSearch.results.length; i++) {
+    for (let i = 0; i < results.length; i++) {
         let cardCol = document.createElement("div");
         cardCol.classList.add("col", "col-md-5", "mx-auto", "mt-2", "mb-4");
         let card = document.createElement("div");
@@ -198,15 +234,13 @@ function renderRecipes(data) {
         cardIndividual.appendChild(cardCol);
         
 
-        cardTitle.textContent = resultSearch.results[i].recipeName;
-        let time = resultSearch.results[i].totalTimeInSeconds;
-        let hour = Math.floor(time / 3600);
+        cardTitle.textContent = results[i].recipeName;
+        let time = results[i].totalTimeInSeconds;
         let min = Math.floor(time % 3600 / 60);
-        let hourDisplay = hour > 0 ? hour + (hour === 1 ? " hour " : " hours ") : "";
         let minDisplay = min > 0 ? min + (min === 1 ? " minute " : " minutes ") : "";
-        cardText.textContent = "Cooking Time: " + hourDisplay + minDisplay;
+        cardText.textContent = "Cooking Time: " + minDisplay;
 
-        resultSearch.recipeID = resultSearch.results[i].id;
+        resultSearch.recipeID = results[i].id;
     
         let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
         
