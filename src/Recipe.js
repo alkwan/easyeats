@@ -157,7 +157,13 @@ setTimeout(function() {
         .then(filterResults)
         .then(renderRecipes)
         .catch(handleError);    //Array results in PromiseValue.matches
+}, 2000);
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 // Filter the data from the API
 function filterResults(data) {
     let matches = data.matches;
@@ -185,21 +191,21 @@ function filterResults(data) {
     recipes.sort(function(a, b) {
         return b.percentMatch - a.percentMatch;
     });
-    
-    let results = recipes.splice(0, 10);
+
+    // get the top 100 matches and sort them by lowest number of ingredients
+    let topOneHundred = recipes.splice(0, 100);
+    topOneHundred.sort(function(a, b) {
+        return a.ingredients.length - b.ingredients.length;
+    });
+
+    // grab the top 10 recipes
+    let results = topOneHundred.slice(0, 10);
+
     // now take this and display it on the screen... so return it???
     console.log(results);
     return results;
-    }
+}
 
-
-}, 2000);
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 
 function renderRecipes(results) {
     //resultSearch.results = data.matches;
