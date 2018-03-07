@@ -27,3 +27,17 @@ if it's not present, don't show loader */
 	background: url(images/loader-64x/Preloader_2.gif) center no-repeat #fff;
 }
 
+#progress {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f2f0f0;
+    border-top: 16px solid #f02457;
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+}

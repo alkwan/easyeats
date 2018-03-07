@@ -21,8 +21,7 @@ body, html {
 
 }
 
-
-#modal-submit {
+#modal-submit, #add-button {
     background-color: #ef9a9a;
 
 }
@@ -30,11 +29,10 @@ body, html {
 .nav>li>a.active,
 .nav>li>a:hover,
 .nav>li>a:focus {
-    background-color:#ef9a9a;
+    background-color:#2E2E2E;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
     color: white;
-    margin-right: 15px;
-   
+    margin-right: 15px;  
 }
 
 .nav>li>a {
@@ -49,6 +47,5 @@ body, html {
 
 span img{
     cursor: pointer;
-    
     margin-left: 30px;
 }
