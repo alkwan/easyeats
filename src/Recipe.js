@@ -237,11 +237,15 @@ function renderRecipes(results) {
     let cardIndividual = document.querySelector("#individual-recipe");
     for (let i = 0; i < results.length; i++) {
         let cardCol = document.createElement("div");
-        cardCol.classList.add("col", "col-md-5", "mx-auto", "mt-2", "mb-4");
+        cardCol.classList.add("d-flex", "col", "col-md-5", "mx-auto", "mt-2", "mb-4");
         let card = document.createElement("div");
         card.classList.add("card");
+        card.setAttribute("id", "card" + i);
+        card.setAttribute("data-target", "#recipe-info")
+        card.setAttribute("data-toggle", "modal")
+
         let cardImg = document.createElement("img");
-        cardImg.classList.add("img-fluid");
+        //cardImg.classList.add("img-fluid");
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
         let cardTitle = document.createElement("h4");
@@ -250,9 +254,6 @@ function renderRecipes(results) {
         cardText.classList.add("card-text");
         let cardButton = document.createElement("a");
         cardButton.classList.add("btn", "btn-pink");
-        cardButton.setAttribute("id", "card-button" + i);
-        cardButton.setAttribute("data-target", "#recipe-info")
-        cardButton.setAttribute("data-toggle", "modal")
         cardButton.textContent = "Get Recipe";
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardText);
@@ -287,7 +288,7 @@ function renderRecipes(results) {
             } else { 
                 cardImg.src = "img/knife_and_fork.png";
             }
-            document.querySelector("#card-button" + i).addEventListener("click", function(){
+            document.querySelector("#card" + i).addEventListener("click", function(){
                 console.log(recipeinfo)
                 document.querySelector(".modal-title").textContent = recipeinfo.name;
                 if (resultSearch.recipeImg) {
@@ -295,7 +296,7 @@ function renderRecipes(results) {
                 }
                 document.querySelector("#ingredients").textContent = "";
                 document.querySelector("#ingredients").text = arrToUl(recipeinfo.ingredientLines);
-                document.querySelector("#rating").textContent = recipeinfo.rating;
+                document.querySelector("#rating").textContent = recipeinfo.rating + " / 5";
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
             }); 
 

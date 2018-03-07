@@ -49,7 +49,7 @@ document.querySelector("#input-form")
         ingreInput.value = "";
         if (searchSpec.ingredients.size >= 3) {
             QUIZ_SUBMIT.disabled = false;   
-            QUIZ_SUBMIT.classList.add("animated", "bounce", "infinite");
+            QUIZ_SUBMIT.classList.add("animated", "pulse", "infinite");
         } 
     });
 
@@ -63,7 +63,7 @@ function deleteIngre(ingreid) {
     
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
-        QUIZ_SUBMIT.classList.remove("animated", "bounce", "infinite");
+        QUIZ_SUBMIT.classList.remove("animated", "pulse", "infinite");
         document.querySelector("#submit-link").setAttribute("href", "#");
         
     } 
@@ -85,6 +85,7 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
     searchSpec.diet = undefined;
     QUIZ_SUBMIT.disabled = true; 
     document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
+    QUIZ_SUBMIT.classList.remove("animated", "pulse", "infinite");
 });
 
 // Keep track of checked allergy
@@ -110,8 +111,13 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
 document.querySelector("#modal-submit").addEventListener("click", function() {
     if (searchSpec.ingredients.size >= 3) {
         //Dont let user submit button until at least 3 ingreds are put in!
-        document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
+        //let urlInfo = urlWrangling();
+        //console.log(urlInfo)
+        //setTimeout(function () {
+            document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
+        //}, 1000);
     }
+    
 });
 
 function urlWrangling() {
