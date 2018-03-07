@@ -1,8 +1,6 @@
 //Gets all the user input about the recipe they are looking for
-
-"use strict";
-
 new WOW().init();
+"use strict";
 
 var searchSpec = {
     ingredients: new Set(),
@@ -34,9 +32,7 @@ function renderIngredients(input) {
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
-    for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));
-    console.log(searchSpec.ingredients)
-    
+    for (let item of searchSpec.ingredients) ul.appendChild(renderIngredients(item));    
 }
 
 render(searchSpec);
@@ -53,6 +49,7 @@ document.querySelector("#input-form")
         ingreInput.value = "";
         if (searchSpec.ingredients.size >= 3) {
             QUIZ_SUBMIT.disabled = false;   
+            QUIZ_SUBMIT.classList.add("animated", "bounce", "infinite");
         } 
     });
 
@@ -66,6 +63,7 @@ function deleteIngre(ingreid) {
     
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
+        QUIZ_SUBMIT.classList.remove("animated", "bounce", "infinite");
         document.querySelector("#submit-link").setAttribute("href", "#");
         
     } 
@@ -85,8 +83,6 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
         DIET_CHECK[i].checked = false;
     }
     searchSpec.diet = undefined;
-    let recipeCard = document.querySelector("#individual-recipe");
-    recipeCard.innerHTML = "";
     QUIZ_SUBMIT.disabled = true; 
     document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
 });

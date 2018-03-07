@@ -19,17 +19,47 @@
 
 </head>
 
-<body>
-    <div class="container pt-5 d-flex justify-content-center">
+<body onload="loadPage()">
+    <div class="container pt-5 d-flex justify-content-center" id="restartQuiz">
         <a href="index.html"><button type="button" class="btn btn-elegant btn-lg">RESTART</button></a>
 
     </div>
-    
+
     <div class="container">
+        <div class= "row animated rotateIn infinite" id="progress">
+
+        </div>
+    </div>
+
+    <div class="container animated slideInUp" style="display:none;" id="recipesresults">
         <div class= "row "id="individual-recipe">
             
         </div>
         
+    </div>
+    <div class="modal fade" id="recipe-info" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <img src="" id="modal-img">
+                    </div>
+                    <p><span>Ingredients: </span><span id="ingredients"></span></p>
+                    <p><span>Rating: </span><span id="rating"></span></p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <a href= "" id="instruction"><button type="button" class="btn btn-pink">Instruction</button></a>
+                    <button type="button" class="btn btn-elegant" data-dismiss="modal">Close</button>                      
+                </div>
+            </div>
+        </div>
     </div>
 
 

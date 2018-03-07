@@ -1,3 +1,5 @@
+"use strict";
+
 // Gets recipes from the API and populated the view
 
 const API_ID = "135ece56";
@@ -31,6 +33,13 @@ let resultSearch = {
 
 let metaData = {};
 
+function loadPage() {
+    setTimeout(showPage, 7000);
+}
+function showPage() {
+  document.querySelector("#progress").style.display = "none";
+  document.querySelector("#recipesresults").style.display = "block";
+}
 
 //Creates a URL endpoint for the API to grab data
 function createSearchURL() {
@@ -82,9 +91,9 @@ function createSearchURL() {
  */
 function handleResponse(response) {
     if (response.ok) {
-        let results = response.json();
-        console.log(results);
-        return results;
+        //let results = response.json();
+        //console.log(results);
+        return response.json();
     } else {
         return response.json()
             .then(function(err) {
@@ -135,12 +144,6 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
-
-
-
-//let resultArray = [];
-
-
 //Handles Metadata URL codes
 fetch(META_ALLERGY)
     .then(parseMetaData)
@@ -170,6 +173,8 @@ setTimeout(function() {
 ///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 // Filter the data from the API
 function filterResults(data) {
+
+    console.log("filtering")
     let matches = data.matches;
     let recipes = [];
 
@@ -206,14 +211,13 @@ function filterResults(data) {
     let results = topOneHundred.slice(0, 10);
 
     // now take this and display it on the screen... so return it???
-    console.log(results);
     return results;
 }
 
 
 function renderRecipes(results) {
     //resultSearch.results = data.matches;
-    
+    console.log("rendering")
     let cardIndividual = document.querySelector("#individual-recipe");
     for (let i = 0; i < results.length; i++) {
         let cardCol = document.createElement("div");
@@ -230,6 +234,9 @@ function renderRecipes(results) {
         cardText.classList.add("card-text");
         let cardButton = document.createElement("a");
         cardButton.classList.add("btn", "btn-pink");
+        cardButton.setAttribute("id", "card-button" + i);
+        cardButton.setAttribute("data-target", "#recipe-info")
+        cardButton.setAttribute("data-toggle", "modal")
         cardButton.textContent = "Get Recipe";
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardText);
@@ -250,21 +257,45 @@ function renderRecipes(results) {
     
         let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
         
-        setTimeout(function() {
-            getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
-            getMetaCode("diet", metaData.diet, resultSearch.diet);
-            fetch(recipeDetailUrl)
-                .then(handleResponse)
-                .then(renderRecipeImg)
-                .catch(handleError);    //Array results in PromiseValue.matches
-        }, 1000);
+        fetch(recipeDetailUrl)
+            .then(handleResponse)
+            .then(renderRecipeInfo)
+            .catch(handleError);
         
-        function renderRecipeImg(idResult) {
-            resultSearch.recipeImg = idResult.images[0].hostedLargeUrl;
-            cardImg.src = resultSearch.recipeImg;
+        
+        function renderRecipeInfo(recipeinfo) {
             
-        }
-    }
-    
+            resultSearch.recipeImg = recipeinfo.images[0].hostedLargeUrl;
+            if (resultSearch.recipeImg) {
+                cardImg.src = resultSearch.recipeImg;
+            } else { 
+                cardImg.src = "../img/knife_and_fork.png";
+            }
+            document.querySelector("#card-button" + i).addEventListener("click", function(){
+                console.log(recipeinfo)
+                document.querySelector(".modal-title").textContent = recipeinfo.name;
+                if (resultSearch.recipeImg) {
+                    document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
+                }
+                document.querySelector("#ingredients").textContent = recipeinfo.ingredientLines;
+                document.querySelector("#rating").textContent = recipeinfo.rating;
+                document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
+            }); 
 
+        }
+        
+            
+    }
+        /*function renderIngredients(results) {
+            document.querySelector("#card-button").addEventListener("click", function(){ 
+                document.querySelector(".modal-title").textContent = results.name;
+            });  
+
+        } */
 }
+    
+document.querySelector("#restartQuiz").addEventListener("click", function(){ 
+    let recipeCard = document.querySelector("#individual-recipe");
+    recipeCard.innerHTML = "";
+}); 
+
