@@ -214,6 +214,22 @@ function filterResults(data) {
     return results;
 }
 
+function arrToUl(arr) {
+    var div = document.getElementById('ingredients');
+    var ul = document.createElement('ul');
+    
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] instanceof Array) {
+        var list = arrToUl(arr[i]);
+        } else {
+        var li = document.createElement('li');
+        li.appendChild(document.createTextNode(arr[i]));
+        console.log(ul.appendChild(li));
+        }
+        div.appendChild(ul);
+    }
+}
+
 
 function renderRecipes(results) {
     //resultSearch.results = data.matches;
@@ -277,7 +293,8 @@ function renderRecipes(results) {
                 if (resultSearch.recipeImg) {
                     document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
                 }
-                document.querySelector("#ingredients").textContent = recipeinfo.ingredientLines;
+                document.querySelector("#ingredients").textContent = "";
+                document.querySelector("#ingredients").text = arrToUl(recipeinfo.ingredientLines);
                 document.querySelector("#rating").textContent = recipeinfo.rating;
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
             }); 
@@ -290,7 +307,6 @@ function renderRecipes(results) {
             document.querySelector("#card-button").addEventListener("click", function(){ 
                 document.querySelector(".modal-title").textContent = results.name;
             });  
-
         } */
 }
     
@@ -298,4 +314,3 @@ document.querySelector("#restartQuiz").addEventListener("click", function(){
     let recipeCard = document.querySelector("#individual-recipe");
     recipeCard.innerHTML = "";
 }); 
-
