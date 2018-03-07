@@ -165,18 +165,12 @@ setTimeout(function() {
         });    //Array results in PromiseValue.matches
 }, 2000);
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 // Filter the data from the API
 function filterResults(data) {
-
     console.log("filtering")
     let matches = data.matches;
     let recipes = [];
-
     for (let i = 0; i < matches.length; i++) {
         let numMatches = 0;
         let ingredients = matches[i].ingredients;
@@ -216,7 +210,6 @@ function filterResults(data) {
 function arrToUl(arr) {
     var div = document.getElementById('ingredients');
     var ul = document.createElement('ul');
-    
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] instanceof Array) {
         var list = arrToUl(arr[i]);
@@ -229,9 +222,13 @@ function arrToUl(arr) {
     }
 }
 
-
 function renderRecipes(results) {
-    //resultSearch.results = data.matches;
+    if (results.length === 0) {
+        let noResult = document.createElement("h2");
+        noResult.classList.add("white-text", "mt-5", "text-center");
+        noResult.textContent= "No results found! Try another search.";
+        document.querySelector("#no-result").appendChild(noResult);
+    }
     console.log("rendering")
     let cardIndividual = document.querySelector("#individual-recipe");
     for (let i = 0; i < results.length; i++) {
@@ -262,7 +259,6 @@ function renderRecipes(results) {
         cardCol.appendChild(card);
         cardIndividual.appendChild(cardCol);
         
-
         cardTitle.textContent = results[i].recipeName;
         let time = results[i].totalTimeInSeconds;
         let min = Math.floor(time % 3600 / 60);
@@ -278,9 +274,7 @@ function renderRecipes(results) {
             .then(renderRecipeInfo)
             .catch(handleError);
         
-        
         function renderRecipeInfo(recipeinfo) {
-            
             resultSearch.recipeImg = recipeinfo.images[0].hostedLargeUrl;
             if (resultSearch.recipeImg) {
                 cardImg.src = resultSearch.recipeImg;
@@ -298,16 +292,8 @@ function renderRecipes(results) {
                 document.querySelector("#rating").textContent = recipeinfo.rating + " / 5";
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
             }); 
-
-        }
-        
-            
+        }           
     }
-        /*function renderIngredients(results) {
-            document.querySelector("#card-button").addEventListener("click", function(){ 
-                document.querySelector(".modal-title").textContent = results.name;
-            });  
-        } */
 }
     
 document.querySelector("#restartQuiz").addEventListener("click", function(){ 

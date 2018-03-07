@@ -59,8 +59,6 @@ function deleteIngre(ingreid) {
     let ul = document.querySelector("#ul-list");
     ul.removeChild(ingre);
     searchSpec.ingredients.delete(ingre.textContent);
-
-    
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
         QUIZ_SUBMIT.classList.remove("animated", "pulse", "infinite");
@@ -124,9 +122,7 @@ function urlWrangling() {
     let allergyArr = Array.from(searchSpec.allergy);
     let ingredArr = Array.from(searchSpec.ingredients);
     let dietValue = searchSpec.diet;
-    
     let urlParams = new URLSearchParams(window.location.search);
-
     for (let i = 0; i < allergyArr.length; i++) {
         urlParams.append("allergy", allergyArr[i]);
     }
