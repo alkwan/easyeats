@@ -8,6 +8,8 @@ const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID 
 const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 const RECIPE_DETAIL_URL = "http://api.yummly.com/v1/api/recipe/{recipeID}?_app_id=" + API_ID + "&_app_key=" + API_KEY;
+const PROGRESS = document.querySelector("#progress");
+const RECIPES_RESULTS = document.querySelector("#recipesresults");
 
 /* KEEP THIS CHUNK FOR NOW!!!
 let searchSpec = {
@@ -32,14 +34,6 @@ let resultSearch = {
 }
 
 let metaData = {};
-
-function loadPage() {
-    setTimeout(showPage, 7000);
-}
-function showPage() {
-  document.querySelector("#progress").style.display = "none";
-  document.querySelector("#recipesresults").style.display = "block";
-}
 
 //Creates a URL endpoint for the API to grab data
 function createSearchURL() {
@@ -157,13 +151,18 @@ fetch(META_DIET)
     
 //Cannot get codes right away when calling API
 setTimeout(function() {
+    PROGRESS.classList.remove("d-none");
     getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
     getMetaCode("diet", metaData.diet, resultSearch.diet);
     fetch(createSearchURL())
         .then(handleResponse)
         .then(filterResults)
         .then(renderRecipes)
-        .catch(handleError);    //Array results in PromiseValue.matches
+        .catch(handleError)
+        .then(function() {
+            PROGRESS.classList.add("d-none");
+            RECIPES_RESULTS.classList.remove("d-none");
+        });    //Array results in PromiseValue.matches
 }, 2000);
 
 
