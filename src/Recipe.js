@@ -33,6 +33,13 @@ let resultSearch = {
 
 let metaData = {};
 
+function loadPage() {
+    setTimeout(showPage, 7000);
+}
+function showPage() {
+  document.querySelector("#progress").style.display = "none";
+  document.querySelector("#recipesresults").style.display = "block";
+}
 
 //Creates a URL endpoint for the API to grab data
 function createSearchURL() {
@@ -166,6 +173,7 @@ setTimeout(function() {
 ///////////////////////HARDCODED THINGS UNDER HERE FOR FORMATTING CARDS, DELETE AFTERWARDS
 // Filter the data from the API
 function filterResults(data) {
+
     console.log("filtering")
     let matches = data.matches;
     let recipes = [];

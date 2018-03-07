@@ -1,8 +1,6 @@
 //Gets all the user input about the recipe they are looking for
-
-"use strict";
-
 new WOW().init();
+"use strict";
 
 var searchSpec = {
     ingredients: new Set(),
