@@ -285,7 +285,7 @@ function renderRecipes(results) {
             if (resultSearch.recipeImg) {
                 cardImg.src = resultSearch.recipeImg;
             } else { 
-                cardImg.src = "../img/knife_and_fork.png";
+                cardImg.src = "img/knife_and_fork.png";
             }
             document.querySelector("#card-button" + i).addEventListener("click", function(){
                 console.log(recipeinfo)
