@@ -4,10 +4,10 @@
 
 const API_ID = "135ece56";
 const API_KEY = "461b47c5925be6bbc2ec70ad608f7084";
-const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const META_ALLERGY = "http://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const META_DIET = "http://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
-const RECIPE_DETAIL_URL = "http://api.yummly.com/v1/api/recipe/{recipeID}?_app_id=" + API_ID + "&_app_key=" + API_KEY;
+const API_RECIPE_URL = "https://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
+const META_ALLERGY = "https://api.yummly.com/v1/api/metadata/allergy?_app_id=" + API_ID + "&_app_key=" + API_KEY;
+const META_DIET = "https://api.yummly.com/v1/api/metadata/diet?_app_id=" + API_ID + "&_app_key=" + API_KEY;
+const RECIPE_DETAIL_URL = "https://api.yummly.com/v1/api/recipe/{recipeID}?_app_id=" + API_ID + "&_app_key=" + API_KEY;
 
 /* KEEP THIS CHUNK FOR NOW!!!
 let searchSpec = {
