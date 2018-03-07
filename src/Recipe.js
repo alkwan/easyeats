@@ -219,7 +219,6 @@ function arrToUl(arr) {
     var ul = document.createElement('ul');
     
     for (var i = 0; i < arr.length; i++) {
-    
         if (arr[i] instanceof Array) {
         var list = arrToUl(arr[i]);
         } else {
@@ -229,7 +228,7 @@ function arrToUl(arr) {
         }
         div.appendChild(ul);
     }
-    }
+}
 
 
 function renderRecipes(results) {
@@ -294,6 +293,7 @@ function renderRecipes(results) {
                 if (resultSearch.recipeImg) {
                     document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
                 }
+                document.querySelector("#ingredients").textContent = "";
                 document.querySelector("#ingredients").text = arrToUl(recipeinfo.ingredientLines);
                 document.querySelector("#rating").textContent = recipeinfo.rating;
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
