@@ -280,10 +280,13 @@ function renderRecipes(results) {
         
         
         function renderRecipeInfo(recipeinfo) {
+
+            // let imgUrl= str.replace(/http/i, 'https');
             
             resultSearch.recipeImg = recipeinfo.images[0].hostedLargeUrl;
             if (resultSearch.recipeImg) {
-                cardImg.src = resultSearch.recipeImg;
+                cardImg.src = resultSearch.recipeImg.replace(/http/i, 'https');
+
             } else { 
                 cardImg.src = "../img/knife_and_fork.png";
             }
