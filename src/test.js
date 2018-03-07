@@ -20,9 +20,11 @@ function renderIngredients(input) {
     img.src = "./img/deleteicon.png"
     span.appendChild(img);
     li.appendChild(span);
+
+    
+
     return li;
 }
-
 function render(state) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
@@ -37,6 +39,7 @@ document.querySelector("#add-button")
     .addEventListener("click", function() {
         let ingreInput = document.querySelector("#input-ingre");
         let ingre = ingreInput.value;
+        //let input = {ingre: ingre};
         state.ingredients.push(ingre);
         render(state);
         ingreInput.value = "";
@@ -60,6 +63,7 @@ document.querySelector("#beginquiz").addEventListener("click", function() {
     ul.textContent = "";
     state.ingredients = [];
     
+    //let allergyCheck = document.querySelectorAll("#allergy-input");
     for (let i = 0; i < ALLERGY_CHECK.length; i++) {
         ALLERGY_CHECK[i].checked = false;
     }
