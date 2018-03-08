@@ -274,8 +274,10 @@ function renderRecipes(results) {
             // information and a link to the external recipe.
             document.querySelector("#card" + i).addEventListener("click", function(){
                 document.querySelector(".modal-title").textContent = recipeinfo.name;
-                if (resultSearch.recipeImg) {
+                if (recipeinfo.images[0].hostedLargeUrl) {
                     document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
+                } else {
+                    document.querySelector("#modal-img").src = "";
                 }
                 var array = recipeinfo.ingredientLines;
                 document.getElementById("ingredients").innerHTML = '<ul><li>' + array.join("</li><li>"); + '</li></ul>';
