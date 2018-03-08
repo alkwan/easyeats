@@ -47,7 +47,7 @@ document.querySelector("#input-form")
     .addEventListener("submit", function(evt) {
         evt.preventDefault();
         let ingreInput = document.querySelector("#input-ingre");
-        let ingre = ingreInput.value;
+        let ingre = ingreInput.value.toLowerCase();
         searchSpec.ingredients.add(ingre);
         searchSpec.currentIngre = ingre;
         render(searchSpec);
