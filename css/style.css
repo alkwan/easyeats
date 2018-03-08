@@ -18,12 +18,10 @@ body, html {
         background-repeat: no-repeat;
         height: 100vh;
     }
-
 }
 
-#modal-submit, #add-button {
-    background-color: #ef9a9a;
-
+#modal-submit {
+    background-color: #df234b;
 }
  
 .nav>li>a.active,

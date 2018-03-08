@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Recipes</title>
-
+    <title>Easy Eats</title>
     <link rel="icon" href="img/titleicon.png">
-    
-    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-     
     <link rel="stylesheet" href="css/recipe.css">
-
     <link href="mdb/css/mdb.min.css" rel="stylesheet">
-    <link href="node_modules/pretty-checkbox/dist/pretty-checkbox.min.css" rel="stylesheet">
-
 </head>
 
-<body onload="loadPage()">
+<body>
     <div class="container pt-5 d-flex justify-content-center" id="restartQuiz">
         <a href="index.html"><button type="button" class="btn btn-elegant btn-lg">RESTART</button></a>
+    </div>
+    <div class="container" id="no-result">
 
     </div>
-
     <div class="container">
-        <div class= "row animated rotateIn infinite" id="progress">
-
+        <div class= "row animated rotateIn infinite d-none" id="progress">
         </div>
     </div>
 
-    <div class="container animated slideInUp" style="display:none;" id="recipesresults">
-        <div class= "row "id="individual-recipe">
-            
+    <div class="container animated slideInUp d-none" id="recipesresults">
+        <div class= "row "id="individual-recipe"> 
         </div>
         
     </div>
@@ -52,28 +43,23 @@
                     </div>
                     <p><span>Ingredients: </span><span id="ingredients"></span></p>
                     <p><span>Rating: </span><span id="rating"></span></p>
-                    
                 </div>
                 <div class="modal-footer">
-                    <a href= "" id="instruction"><button type="button" class="btn btn-pink">Instruction</button></a>
+                    <a href= "" id="instruction" target="_blank"><button type="button" class="btn btn-pink">Instruction</button></a>
                     <button type="button" class="btn btn-elegant" data-dismiss="modal">Close</button>                      
                 </div>
             </div>
         </div>
     </div>
 
-
     <!--scripts-->
-
     <script type="text/javascript" src="mdb/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="mdb/js/popper.min.js"></script>
     <script type="text/javascript" src="mdb/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="mdb/js/mdb.min.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
     <script src="src/Recipe.js"></script>
 </body>
 

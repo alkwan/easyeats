@@ -5,7 +5,6 @@ body, html {
 }
 body {
     background-image: url("../img/bg3.jpg");
-    /*background-position: center;*/
     background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), url("../img/bg3.jpg");
     background-repeat: repeat;
     background-size: cover;
@@ -40,4 +39,8 @@ if it's not present, don't show loader */
     border-radius: 50%;
     width: 130px;
     height: 130px;
+}
+
+.card {
+    width: 100%;
 }
