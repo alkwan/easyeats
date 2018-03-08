@@ -21,7 +21,7 @@ Use EasyEats **[here](https://info343b-w18.github.io/info343final-group2/)**!!!
 
 
 ## **Meet the Devs!**
-<img src="img/markdown/theDevs.jpg" alt="The devs behind EasyEats" style="width: 600px;"/>
+<img src="img/markdown/TheDevs.jpg" alt="The devs behind EasyEats" style="width: 600px;"/>
 
 Backend: Maggie Tsang and Alaina Kwan
 * Interact with the Yummly API to get the desired recipe
