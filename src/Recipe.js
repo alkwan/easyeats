@@ -74,8 +74,6 @@ function createSearchURL() {
  */
 function handleResponse(response) {
     if (response.ok) {
-        //let results = response.json();
-        //console.log(results);
         return response.json();
     } else {
         return response.json()
@@ -159,15 +157,13 @@ setTimeout(function() {
 
 // Filter the results from the API into recipes
 // with the highest number of matching ingredients.
-// Picks the top 10 recipes with the fewest total
-// ingredients.
+// Picks the top 10 recipes with the fewest total ingredients.
 function filterResults(data) {
     let matches = data.matches;
     let recipes = [];
 
     // Look at the ingredients of each recipe, see how many match,
-    // and keep track of them if more than half of the ingredients
-    // match.
+    // and keep track of them if more than half of the ingredients match.
     for (let i = 0; i < matches.length; i++) {
         let numMatches = 0;
         let ingredients = matches[i].ingredients;
