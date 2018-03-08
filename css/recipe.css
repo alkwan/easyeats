@@ -41,6 +41,6 @@ if it's not present, don't show loader */
     height: 130px;
 }
 
-.card {
+.card, .card img{
     width: 100%;
 }

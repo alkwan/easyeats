@@ -202,21 +202,6 @@ function filterResults(data) {
     return results;
 }
 
-// Converts the array of ingredients into an unordered list
-function arrToUl(arr) {
-    var div = document.getElementById('ingredients');
-    var ul = document.createElement('ul');
-    for (var i = 0; i < arr.length; i++) {
-            if (arr[i] instanceof Array) {
-            var list = arrToUl(arr[i]);
-        } else {
-            var li = document.createElement('li');
-            li.appendChild(document.createTextNode(arr[i]));
-        }
-        div.appendChild(ul);
-    }
-}
-
 // Renders the 10 (or fewer) recipes that were filtered through the results.
 // Let the user know if there are no results found.
 function renderRecipes(results) {
@@ -292,8 +277,8 @@ function renderRecipes(results) {
                 if (resultSearch.recipeImg) {
                     document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
                 }
-                document.querySelector("#ingredients").textContent = "";
-                document.querySelector("#ingredients").text = arrToUl(recipeinfo.ingredientLines);
+                var array = recipeinfo.ingredientLines;
+                document.getElementById("ingredients").innerHTML = '<ul><li>' + array.join("</li><li>"); + '</li></ul>';
                 document.querySelector("#rating").textContent = recipeinfo.rating + " / 5";
                 document.querySelector("#instruction").href = recipeinfo.source.sourceRecipeUrl;
             }); 
