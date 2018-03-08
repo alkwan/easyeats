@@ -1,7 +1,8 @@
-//Gets all the user input about the recipe they are looking for
+// Gets all the user input about the recipe they are looking for
 new WOW().init();
 "use strict";
 
+// Keep track of what the user is searching for
 var searchSpec = {
     ingredients: new Set(),
     currentIngre: "",
@@ -14,6 +15,8 @@ const DIET_CHECK = document.querySelectorAll("#diet-input");
 const QUIZ_SUBMIT = document.querySelector("#modal-submit");
 
 let ingreID = 0;
+
+// Creates each ingredient inputted by the user.
 function renderIngredients(input) {
     let li = document.createElement("li");
     li.textContent = input;
@@ -29,6 +32,8 @@ function renderIngredients(input) {
     return li;
 }
 
+// Displays all of the ingredients inputted
+// by the user as an unordered list.
 function render(searchSpec) {
     let ul = document.querySelector("#ul-list");
     ul.textContent = "";
@@ -53,7 +58,7 @@ document.querySelector("#input-form")
         } 
     });
 
-// Remove specific ingredient
+// Remove a specific ingredient
 function deleteIngre(ingreid) {
     let ingre = document.getElementById(ingreid);
     let ul = document.querySelector("#ul-list");
@@ -62,10 +67,8 @@ function deleteIngre(ingreid) {
     if (searchSpec.ingredients.size < 3) {
         QUIZ_SUBMIT.disabled = true;
         QUIZ_SUBMIT.classList.remove("animated", "pulse", "infinite");
-        document.querySelector("#submit-link").setAttribute("href", "#");
-        
-    } 
-    
+        document.querySelector("#submit-link").setAttribute("href", "#");  
+    };
 }   
 
 // Start search all over again
@@ -106,18 +109,15 @@ for (let i = 0; i < DIET_CHECK.length; i++) {
     });
 }
 
+// Make the submit button clickable once the user inputs at least 3 ingredients.
 document.querySelector("#modal-submit").addEventListener("click", function() {
     if (searchSpec.ingredients.size >= 3) {
-        //Dont let user submit button until at least 3 ingreds are put in!
-        //let urlInfo = urlWrangling();
-        //console.log(urlInfo)
-        //setTimeout(function () {
-            document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
-        //}, 1000);
+        document.querySelector("#submit-link").setAttribute("href", "recipe.html?" + urlWrangling());
     }
     
 });
 
+// Convert the user's inputed information into a search URL
 function urlWrangling() {
     let allergyArr = Array.from(searchSpec.allergy);
     let ingredArr = Array.from(searchSpec.ingredients);

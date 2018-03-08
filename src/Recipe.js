@@ -1,7 +1,6 @@
 "use strict";
 
-// Gets recipes from the API and populated the view
-
+// Gets recipes from the API, filters the results into the best matches, and displays them for the user.
 const API_ID = "135ece56";
 const API_KEY = "461b47c5925be6bbc2ec70ad608f7084";
 const API_RECIPE_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEY;
@@ -11,31 +10,22 @@ const RECIPE_DETAIL_URL = "http://api.yummly.com/v1/api/recipe/{recipeID}?_app_i
 const PROGRESS = document.querySelector("#progress");
 const RECIPES_RESULTS = document.querySelector("#recipesresults");
 
-/* KEEP THIS CHUNK FOR NOW!!!
-let searchSpec = {
-    q:["onion", "bread", "fish"], //&q=onion+bread+fish
-    allergy: ["Dairy-Free", "Gluten-Free"], //meta data = http://api.yummly.com/v1/api/metadata/allergy?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
-                        //format = &allowedAllergy[]=396^Dairy-Free&allowedAllergy[]=393^Gluten-Free
-    diet: ["Pescetarian", "Lacto vegetarian"] //meta data = http://api.yummly.com/v1/api/metadata/diet?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
-                        //format = &allowedDiet[]=390^Pescetarian&allowedDiet[]=388^Lacto vegetarian
-} 
-*/
-
-
+// Grab the url parameters from the landing page
 let urlParams = new URLSearchParams(window.location.search);
 
+// The inputed ingredients, allergies, and diets for the overall search.
+// Also keeps track of each recipe ID and image when displaying the results.
 let resultSearch = {
     ingredients: urlParams.getAll("ingred"),
     allergy: urlParams.getAll("allergy"),
     diet: [urlParams.get("diet")],
-   // results: "",
     recipeID:"",
     recipeImg: ""
 }
 
 let metaData = {};
 
-//Creates a URL endpoint for the API to grab data
+// Creates a URL endpoint for the API to grab data
 function createSearchURL() {
     //Filter search
     let search = "";
@@ -51,7 +41,7 @@ function createSearchURL() {
         }
     }
 
-    //Get allergy data
+    // Get allergy data
     let allergySearch = "";
     let allergies = resultSearch.allergy;   
     for (let i = 0; i < allergies.length; i++) {
@@ -62,7 +52,7 @@ function createSearchURL() {
         }
     }
     
-    //Get diet data
+    // Get diet data
     let restriction = "";
     let restrictResults = urlParams.get("diet");
 
@@ -75,7 +65,6 @@ function createSearchURL() {
     }
 
     let endpoint = API_RECIPE_URL + search + allergySearch + restriction + "&maxResult=1000&maxTotalTimeInSeconds=1800";
-    console.log(endpoint);
     return endpoint;
 }
 
@@ -97,7 +86,7 @@ function handleResponse(response) {
 }
 
 /**
- * Handles responses from the fetch() API for the meta Data codes.
+ * Handles responses from the fetch() API for the meta data codes.
  * @param {Response} response 
  */
 function parseMetaData(response) {
@@ -119,11 +108,12 @@ function handleError(err) {
     console.error(err.message);
 }
 
-//Yummly API is silly and returns JSONP instead of JSON
+// Gets the metadata values from the JSONP results
 function set_metadata(key, value) {
     metaData[key] = value;
 }
 
+// Get the codes for the given allergy and/or diet
 function getMetaCode(type, codes, resultArr) {
     for (let i = 0; i < resultArr.length; i++) {
         for (let j = 0; j < codes.length; j++) {
@@ -138,7 +128,8 @@ function getMetaCode(type, codes, resultArr) {
     }
 }
 
-//Handles Metadata URL codes
+// Changes the allergy and diet metadata 
+// into URL codes to add to the endpoint
 fetch(META_ALLERGY)
     .then(parseMetaData)
     .then(rawJs => eval(rawJs))
@@ -149,7 +140,8 @@ fetch(META_DIET)
     .then(rawJs => eval(rawJs))
     .catch(handleError);
     
-//Cannot get codes right away when calling API
+// Fetch the data from the API with the given endpoint.
+// Show a loading icon until the results are returned and rendered.
 setTimeout(function() {
     PROGRESS.classList.remove("d-none");
     getMetaCode("allergy", metaData.allergy, resultSearch.allergy);
@@ -162,15 +154,20 @@ setTimeout(function() {
         .then(function() {
             PROGRESS.classList.add("d-none");
             RECIPES_RESULTS.classList.remove("d-none");
-        });    //Array results in PromiseValue.matches
+        });
 }, 2000);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Filter the data from the API
+// Filter the results from the API into recipes
+// with the highest number of matching ingredients.
+// Picks the top 10 recipes with the fewest total
+// ingredients.
 function filterResults(data) {
-    console.log("filtering")
     let matches = data.matches;
     let recipes = [];
+
+    // Look at the ingredients of each recipe, see how many match,
+    // and keep track of them if more than half of the ingredients
+    // match.
     for (let i = 0; i < matches.length; i++) {
         let numMatches = 0;
         let ingredients = matches[i].ingredients;
@@ -202,26 +199,26 @@ function filterResults(data) {
 
     // grab the top 10 recipes
     let results = topOneHundred.slice(0, 10);
-
-    // now take this and display it on the screen... so return it???
     return results;
 }
 
+// Converts the array of ingredients into an unordered list
 function arrToUl(arr) {
     var div = document.getElementById('ingredients');
     var ul = document.createElement('ul');
     for (var i = 0; i < arr.length; i++) {
-        if (arr[i] instanceof Array) {
-        var list = arrToUl(arr[i]);
+            if (arr[i] instanceof Array) {
+            var list = arrToUl(arr[i]);
         } else {
-        var li = document.createElement('li');
-        li.appendChild(document.createTextNode(arr[i]));
-        console.log(ul.appendChild(li));
+            var li = document.createElement('li');
+            li.appendChild(document.createTextNode(arr[i]));
         }
         div.appendChild(ul);
     }
 }
 
+// Renders the 10 (or fewer) recipes that were filtered through the results.
+// Let the user know if there are no results found.
 function renderRecipes(results) {
     if (results.length === 0) {
         let noResult = document.createElement("h2");
@@ -229,9 +226,10 @@ function renderRecipes(results) {
         noResult.textContent= "No results found! Try another search.";
         document.querySelector("#no-result").appendChild(noResult);
     }
-    console.log("rendering")
+
     let cardIndividual = document.querySelector("#individual-recipe");
     for (let i = 0; i < results.length; i++) {
+        // Make the column for each card
         let cardCol = document.createElement("div");
         cardCol.classList.add("d-flex", "col", "col-md-5", "mx-auto", "mt-2", "mb-4");
         let card = document.createElement("div");
@@ -240,8 +238,8 @@ function renderRecipes(results) {
         card.setAttribute("data-target", "#recipe-info")
         card.setAttribute("data-toggle", "modal")
 
+        // Make each card image and body
         let cardImg = document.createElement("img");
-        //cardImg.classList.add("img-fluid");
         let cardBody = document.createElement("div");
         cardBody.classList.add("card-body");
         let cardTitle = document.createElement("h4");
@@ -259,30 +257,37 @@ function renderRecipes(results) {
         cardCol.appendChild(card);
         cardIndividual.appendChild(cardCol);
         
+        // Add the recipe name and convert total cook time to minutes
         cardTitle.textContent = results[i].recipeName;
         let time = results[i].totalTimeInSeconds;
         let min = Math.floor(time % 3600 / 60);
         let minDisplay = min > 0 ? min + (min === 1 ? " minute " : " minutes ") : "";
         cardText.textContent = "Cooking Time: " + minDisplay;
 
+        // Create the URL for getting each individual recipe
         resultSearch.recipeID = results[i].id;
-    
         let recipeDetailUrl = RECIPE_DETAIL_URL.replace("{recipeID}", resultSearch.recipeID);
         
+        // Fetch the individual recipe image
         fetch(recipeDetailUrl)
             .then(handleResponse)
             .then(renderRecipeInfo)
             .catch(handleError);
         
+        // Gets and sets the recipe image from the API
+        // If there's no image, set it to the default N/A
         function renderRecipeInfo(recipeinfo) {
             resultSearch.recipeImg = recipeinfo.images[0].hostedLargeUrl;
             if (resultSearch.recipeImg) {
+                // Sometimes returns HTTP instead of HTTPS, resulting in console warnings
+                // Please ignore (since it's not our fault but yummly's)
                 cardImg.src = resultSearch.recipeImg;
             } else { 
                 cardImg.src = "img/knife_and_fork.png";
             }
+            // When the user clicks on the card, display extra recipe
+            // information and a link to the external recipe.
             document.querySelector("#card" + i).addEventListener("click", function(){
-                console.log(recipeinfo)
                 document.querySelector(".modal-title").textContent = recipeinfo.name;
                 if (resultSearch.recipeImg) {
                     document.querySelector("#modal-img").src = recipeinfo.images[0].hostedLargeUrl;
@@ -295,7 +300,8 @@ function renderRecipes(results) {
         }           
     }
 }
-    
+
+// When the user clicks the restart button, send them back to the homepage.
 document.querySelector("#restartQuiz").addEventListener("click", function(){ 
     let recipeCard = document.querySelector("#individual-recipe");
     recipeCard.innerHTML = "";
